@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
@@ -32,9 +33,10 @@ class GradeRequest(BaseModel):
 
 
 @app.post("/reset", response_model=Observation)
-def reset(req: ResetRequest):
+def reset(req: Optional[ResetRequest] = None):
+    task_id = req.task_id if req else "task_1"
     try:
-        obs = env.reset(task_id=req.task_id)
+        obs = env.reset(task_id=task_id)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return obs
