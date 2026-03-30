@@ -1,0 +1,62 @@
+name: email-triage
+version: "1.0.0"
+description: >
+  An AI agent receives an email and must classify it, assign a priority,
+  and generate an appropriate response.
+
+observation_space:
+  type: object
+  properties:
+    email_text:
+      type: string
+      description: The full text of the incoming email
+    sender_type:
+      type: string
+      enum: [customer, internal, system]
+      description: The type of sender
+
+action_space:
+  type: object
+  properties:
+    category:
+      type: string
+      enum: [billing, technical, general]
+    priority:
+      type: string
+      enum: [low, medium, high]
+    response:
+      type: string
+      description: The reply text to send back to the sender
+  required: [category, priority, response]
+
+reward:
+  type: continuous
+  range: [0.0, 1.0]
+  description: >
+    +0.4 for correct category, +0.3 for correct priority,
+    +0.3 for response quality (keyword-based partial credit).
+    -0.2 penalty for empty response.
+
+tasks:
+  - id: task_1
+    difficulty: easy
+  - id: task_2
+    difficulty: medium
+  - id: task_3
+    difficulty: hard
+  - id: task_4
+    difficulty: easy
+  - id: task_5
+    difficulty: hard
+
+episode_length: 1
+
+server:
+  endpoints:
+    reset: POST /reset
+    step: POST /step
+    state: GET /state
+    tasks: GET /tasks
+    grader: POST /grader
+    baseline: GET /baseline
+  default_port: 8000
