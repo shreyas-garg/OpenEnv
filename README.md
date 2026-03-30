@@ -1,3 +1,14 @@
+---
+title: OpenEnv
+emoji: 📈
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
+
 # Email Triage and Response System — OpenEnv
 
 An OpenEnv-compliant environment where an AI agent reads incoming emails, classifies them, assigns a priority, and writes an appropriate response.
