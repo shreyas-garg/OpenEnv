@@ -13,6 +13,7 @@ MANDATORY
 
 import os
 import json
+import sys
 
 from openai import OpenAI
 
@@ -21,8 +22,11 @@ from email_env.models import Action
 from email_env.tasks import TASKS
 
 API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
-API_KEY = os.getenv("HF_TOKEN") or os.getenv("API_KEY")
 MODEL_NAME = os.getenv("MODEL_NAME", "meta-llama/Llama-3.1-8B-Instruct")
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+if not HF_TOKEN:
+    raise EnvironmentError("HF_TOKEN environment variable is required.")
 
 SYSTEM_PROMPT = """You are an email triage assistant. Given an email, you must:
 1. Classify the email into exactly one category: billing, technical, or general
@@ -38,67 +42,76 @@ Reply ONLY with valid JSON in this exact format (no markdown, no extra text):
 
 
 def run_inference():
-    if not API_KEY:
-        raise EnvironmentError(
-            "Set HF_TOKEN or API_KEY environment variable."
-        )
-
-    client = OpenAI(api_key=API_KEY, base_url=API_BASE_URL)
+    client = OpenAI(api_key=HF_TOKEN, base_url=API_BASE_URL)
     env = EmailTriageEnv()
     scores = []
 
     for task_id, task in TASKS.items():
-        print(f"[START] task={task_id}", flush=True)
-        print(f"\n--- {task_id} ({task['difficulty']}) ---", flush=True)
-        obs = env.reset(task_id=task_id)
-        print(f"Email: {obs.email_text[:80]}...", flush=True)
-
-        user_msg = (
-            f"Sender type: {obs.sender_type}\n\n"
-            f"Email:\n{obs.email_text}"
-        )
-
-        completion = client.chat.completions.create(
-            model=MODEL_NAME,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_msg},
-            ],
-            temperature=0.2,
-            max_tokens=300,
-        )
-
-        raw = completion.choices[0].message.content.strip()
-
-        # Strip markdown fences if present
-        if raw.startswith("```"):
-            lines = raw.split("\n")
-            lines = [l for l in lines if not l.startswith("```")]
-            raw = "\n".join(lines).strip()
-
+        reward = 0.0
+        success = False
         try:
-            parsed = json.loads(raw)
-        except json.JSONDecodeError:
-            print(f"Failed to parse LLM response: {raw}")
-            # Fallback action
-            parsed = {"category": "general", "priority": "low", "response": ""}
+            print(f"[START] task={task_id}", flush=True)
 
-        action = Action(
-            category=parsed.get("category", "general"),
-            priority=parsed.get("priority", "low"),
-            response=parsed.get("response", ""),
-        )
+            obs = env.reset(task_id=task_id)
 
-        result = env.step(action)
-        print(f"Category: {action.category} (expected: {task['expected_category']})", flush=True)
-        print(f"Priority: {action.priority} (expected: {task['expected_priority']})", flush=True)
-        print(f"Score: {result.reward}", flush=True)
-        print(f"[STEP] step=1 reward={result.reward}", flush=True)
-        print(f"[END] task={task_id} score={result.reward} steps=1", flush=True)
-        scores.append(result.reward)
+            user_msg = (
+                f"Sender type: {obs.sender_type}\n\n"
+                f"Email:\n{obs.email_text}"
+            )
 
-    avg = round(sum(scores) / len(scores), 4) if scores else 0.0
-    print(f"\n=== Average Score: {avg} ===", flush=True)
+            completion = client.chat.completions.create(
+                model=MODEL_NAME,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_msg},
+                ],
+                temperature=0.2,
+                max_tokens=300,
+            )
+
+            raw = completion.choices[0].message.content.strip()
+
+            # Strip markdown fences if present
+            if raw.startswith("```"):
+                lines = raw.split("\n")
+                lines = [l for l in lines if not l.startswith("```")]
+                raw = "\n".join(lines).strip()
+
+            try:
+                parsed = json.loads(raw)
+            except json.JSONDecodeError:
+                parsed = {"category": "general", "priority": "low", "response": ""}
+
+            action = Action(
+                category=parsed.get("category", "general"),
+                priority=parsed.get("priority", "low"),
+                response=parsed.get("response", ""),
+            )
+
+            result = env.step(action)
+            reward = float(result.reward)
+            done = bool(result.done)
+            success = reward >= 0.7
+
+            print(
+                f"[STEP] task={task_id} step=1 reward={reward:.2f} "
+                f"done={'true' if done else 'false'} "
+                f"success={'true' if success else 'false'}",
+                flush=True,
+            )
+            scores.append(reward)
+
+        except Exception as exc:
+            print(f"ERROR in task {task_id}: {exc}", file=sys.stderr, flush=True)
+        finally:
+            print(
+                f"[END] task={task_id} score={reward:.2f} steps=1 "
+                f"success={'true' if success else 'false'}",
+                flush=True,
+            )
+
+    avg = round(sum(scores) / len(scores), 2) if scores else 0.0
+    print(f"\n=== Average Score: {avg:.2f} ===", flush=True)
     return avg
 
 
