@@ -48,9 +48,10 @@ def run_inference():
     scores = []
 
     for task_id, task in TASKS.items():
-        print(f"\n--- {task_id} ({task['difficulty']}) ---")
+        print(f"[START] task={task_id}", flush=True)
+        print(f"\n--- {task_id} ({task['difficulty']}) ---", flush=True)
         obs = env.reset(task_id=task_id)
-        print(f"Email: {obs.email_text[:80]}...")
+        print(f"Email: {obs.email_text[:80]}...", flush=True)
 
         user_msg = (
             f"Sender type: {obs.sender_type}\n\n"
@@ -89,13 +90,15 @@ def run_inference():
         )
 
         result = env.step(action)
-        print(f"Category: {action.category} (expected: {task['expected_category']})")
-        print(f"Priority: {action.priority} (expected: {task['expected_priority']})")
-        print(f"Score: {result.reward}")
+        print(f"Category: {action.category} (expected: {task['expected_category']})", flush=True)
+        print(f"Priority: {action.priority} (expected: {task['expected_priority']})", flush=True)
+        print(f"Score: {result.reward}", flush=True)
+        print(f"[STEP] step=1 reward={result.reward}", flush=True)
+        print(f"[END] task={task_id} score={result.reward} steps=1", flush=True)
         scores.append(result.reward)
 
     avg = round(sum(scores) / len(scores), 4) if scores else 0.0
-    print(f"\n=== Average Score: {avg} ===")
+    print(f"\n=== Average Score: {avg} ===", flush=True)
     return avg
 
 
