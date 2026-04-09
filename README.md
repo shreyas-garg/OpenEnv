@@ -42,11 +42,11 @@ This is a real-world task performed daily by support teams, and a natural fit fo
 
 | ID     | Difficulty | Description |
 |--------|------------|-------------|
-| task_1 | Easy       | Clear billing complaint — duplicate charge, obvious category |
-| task_2 | Medium     | Ambiguous — dashboard change + invoice discrepancy, mixed signals |
-| task_3 | Hard       | Angry customer — app crash + billing issue + 48h no support reply |
-| task_4 | Easy       | Simple general inquiry about support hours and live chat |
-| task_5 | Hard       | System alert — production database lag, stale data, checkout impacted |
+| task_1 | Easy       | Simple general inquiry about support hours and live chat |
+| task_2 | Easy       | Clear billing complaint — duplicate charge, obvious category |
+| task_3 | Medium     | Angry customer — app crash + billing issue + 48h no support reply |
+| task_4 | Medium     | System alert — production database lag, stale data, checkout impacted |
+| task_5 | Hard       | Genuinely ambiguous — looks like billing but root cause is technical (upgrade not flipped) |
 
 ## Reward Function
 
@@ -54,23 +54,51 @@ This is a real-world task performed daily by support teams, and a natural fit fo
 |------------------|--------|----------------------------------------|
 | Category correct | +0.4   | Exact match with expected category     |
 | Priority correct | +0.3   | Exact match with expected priority     |
-| Response quality | +0.3   | Partial — keyword presence score (0–1) |
+| Response quality | +0.3   | Hybrid score (see below)               |
 | Empty response   | −0.2   | Penalty if response is blank           |
 
 Total score range: **0.0 – 1.0** (continuous, with partial credit).
 
+### Response Quality (hybrid, anti-gaming)
+
+The response quality score combines three signals to defeat keyword-stuffing exploits:
+
+1. **Keyword coverage (40%)** — distinct keywords present
+2. **Length & coherence (20%)** — penalises too-short, no-punctuation, repetitive token, and ALL-CAPS responses
+3. **Structural requirement (40%)** — must contain BOTH an acknowledgement (sorry/apologise/thank) AND an action/timeline phrase (will/investigate/refund/escalate/...)
+
+This means a response like `"refund refund refund refund refund"` scores well below 0.4, while a genuine professional reply like `"We sincerely apologise for the duplicate charge. Our team will refund your account within 3-5 business days."` scores above 0.9.
+
 ## Baseline Scores
 
-Model: `llama-3.1-8b-instant` via Groq
+Model: `llama-3.1-8b-instant` via Groq (OpenAI-compatible endpoint)
 
 | Task   | Difficulty | Score |
 |--------|------------|-------|
-| task_1 | Easy       | 0.88  |
-| task_2 | Medium     | 0.42  |
-| task_3 | Hard       | 0.79  |
-| task_4 | Easy       | 0.94  |
-| task_5 | Hard       | 0.90  |
-| **Avg** |           | **0.79** |
+| task_1 | Easy       | 0.92  |
+| task_2 | Easy       | 0.95  |
+| task_3 | Medium     | 0.91  |
+| task_4 | Medium     | 0.94  |
+| task_5 | Hard       | 0.65  |
+| **Avg** |           | **0.87** |
+
+Full baseline trace is committed at [baseline_output.txt](baseline_output.txt).
+To reproduce:
+
+```bash
+API_BASE_URL=https://api.groq.com/openai/v1 \
+HF_TOKEN=<your-key> \
+MODEL_NAME=llama-3.1-8b-instant \
+PYTHONPATH=. python3 inference.py
+```
+
+## Tests
+
+24 unit tests covering grader robustness (including adversarial keyword-stuffing inputs) and environment lifecycle:
+
+```bash
+PYTHONPATH=. python3 -m pytest tests/ -v
+```
 
 ## Setup
 
