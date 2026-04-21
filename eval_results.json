@@ -1,0 +1,2816 @@
+{
+  "summary": {
+    "episodes": 8,
+    "mean_reward": 23.125,
+    "mean_frac_of_max": 0.7708,
+    "drift_sensitive_total": 25,
+    "drift_sensitive_correct": 3,
+    "drift_sensitive_acc": 0.12,
+    "per_drift": {
+      "refund_cap_25": {
+        "total": 6,
+        "correct": 0,
+        "acc": 0.0
+      },
+      "escalate_manager": {
+        "total": 5,
+        "correct": 0,
+        "acc": 0.0
+      },
+      "sla_48hr": {
+        "total": 6,
+        "correct": 1,
+        "acc": 0.1667
+      },
+      "refund_cap_200": {
+        "total": 2,
+        "correct": 2,
+        "acc": 1.0
+      },
+      "sla_2hr": {
+        "total": 6,
+        "correct": 0,
+        "acc": 0.0
+      }
+    }
+  },
+  "results": [
+    {
+      "seed": 100,
+      "total_reward": 22.2,
+      "max_reward": 30.0,
+      "frac_of_max": 0.74,
+      "breakdown_totals": {
+        "compliance": 13.2,
+        "appropriateness": 9.0,
+        "drift_bonus": 0.0
+      },
+      "drift_sensitive_total": 4,
+      "drift_sensitive_correct": 0,
+      "drift_sensitive_acc": 0.0,
+      "per_drift": {
+        "refund_cap_25": {
+          "total": 1,
+          "correct": 0
+        },
+        "escalate_manager": {
+          "total": 3,
+          "correct": 0
+        }
+      },
+      "trajectory": [
+        {
+          "step": 0,
+          "email_kind": "customer",
+          "email_id": "c_0_billing_invoice_download",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 1,
+          "email_kind": "customer",
+          "email_id": "c_1_refund_50",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 2,
+          "email_kind": "customer",
+          "email_id": "c_2_refund_40",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 3,
+          "email_kind": "admin",
+          "email_id": "admin_3_refund_cap_25",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 4,
+          "email_kind": "customer",
+          "email_id": "c_4_billing_prorated",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 5,
+          "email_kind": "customer",
+          "email_id": "c_5_refund_90",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": "refund_cap_25",
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 6,
+          "email_kind": "customer",
+          "email_id": "c_6_refund_150",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 150.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 7,
+          "email_kind": "customer",
+          "email_id": "c_7_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 8,
+          "email_kind": "customer",
+          "email_id": "c_8_info_missing_date",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "charge_date"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 0.5
+        },
+        {
+          "step": 9,
+          "email_kind": "customer",
+          "email_id": "c_9_refund_250",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 10,
+          "email_kind": "customer",
+          "email_id": "c_10_critical_data_loss",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 11,
+          "email_kind": "admin",
+          "email_id": "admin_11_escalate_manager",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.2,
+          "compliance": 0.2
+        },
+        {
+          "step": 12,
+          "email_kind": "customer",
+          "email_id": "c_12_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 13,
+          "email_kind": "customer",
+          "email_id": "c_13_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": "escalate_manager",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 14,
+          "email_kind": "customer",
+          "email_id": "c_14_critical_outage",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": "escalate_manager",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 15,
+          "email_kind": "customer",
+          "email_id": "c_15_refund_50",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 16,
+          "email_kind": "customer",
+          "email_id": "c_16_critical_outage",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": "escalate_manager",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 17,
+          "email_kind": "customer",
+          "email_id": "c_17_refund_75",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 18,
+          "email_kind": "customer",
+          "email_id": "c_18_refund_15",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 15.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 15.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 19,
+          "email_kind": "customer",
+          "email_id": "c_19_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 101,
+      "total_reward": 20.5,
+      "max_reward": 30.0,
+      "frac_of_max": 0.6833,
+      "breakdown_totals": {
+        "compliance": 11.0,
+        "appropriateness": 9.0,
+        "drift_bonus": 0.5
+      },
+      "drift_sensitive_total": 5,
+      "drift_sensitive_correct": 1,
+      "drift_sensitive_acc": 0.2,
+      "per_drift": {
+        "sla_48hr": {
+          "total": 3,
+          "correct": 1
+        },
+        "refund_cap_25": {
+          "total": 2,
+          "correct": 0
+        }
+      },
+      "trajectory": [
+        {
+          "step": 0,
+          "email_kind": "customer",
+          "email_id": "c_0_critical_payment_fail",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 1,
+          "email_kind": "customer",
+          "email_id": "c_1_refund_100",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 100.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 100.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 2,
+          "email_kind": "customer",
+          "email_id": "c_2_chitchat_feedback",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 3,
+          "email_kind": "admin",
+          "email_id": "admin_3_sla_48hr",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "error_fallback"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 4,
+          "email_kind": "customer",
+          "email_id": "c_4_refund_90",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 5,
+          "email_kind": "customer",
+          "email_id": "c_5_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": "sla_48hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 6,
+          "email_kind": "customer",
+          "email_id": "c_6_refund_90",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 7,
+          "email_kind": "customer",
+          "email_id": "c_7_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": "sla_48hr",
+          "reward": 2.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 8,
+          "email_kind": "customer",
+          "email_id": "c_8_billing_invoice_download",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 9,
+          "email_kind": "customer",
+          "email_id": "c_9_refund_180",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 10,
+          "email_kind": "customer",
+          "email_id": "c_10_critical_outage",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": "sla_48hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 11,
+          "email_kind": "admin",
+          "email_id": "admin_11_refund_cap_25",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 12,
+          "email_kind": "customer",
+          "email_id": "c_12_refund_40",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": "refund_cap_25",
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 13,
+          "email_kind": "customer",
+          "email_id": "c_13_refund_150",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 150.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 14,
+          "email_kind": "customer",
+          "email_id": "c_14_refund_180",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 15,
+          "email_kind": "customer",
+          "email_id": "c_15_refund_120",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 120.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 16,
+          "email_kind": "customer",
+          "email_id": "c_16_critical_outage",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 17,
+          "email_kind": "customer",
+          "email_id": "c_17_refund_40",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": "refund_cap_25",
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 18,
+          "email_kind": "customer",
+          "email_id": "c_18_critical_data_loss",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 19,
+          "email_kind": "customer",
+          "email_id": "c_19_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        }
+      ]
+    },
+    {
+      "seed": 102,
+      "total_reward": 24.7,
+      "max_reward": 30.0,
+      "frac_of_max": 0.8233,
+      "breakdown_totals": {
+        "compliance": 15.7,
+        "appropriateness": 9.0,
+        "drift_bonus": 0.0
+      },
+      "drift_sensitive_total": 0,
+      "drift_sensitive_correct": 0,
+      "drift_sensitive_acc": null,
+      "per_drift": {},
+      "trajectory": [
+        {
+          "step": 0,
+          "email_kind": "customer",
+          "email_id": "c_0_info_missing_date",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "charge_date"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 0.5
+        },
+        {
+          "step": 1,
+          "email_kind": "customer",
+          "email_id": "c_1_critical_data_loss",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 2,
+          "email_kind": "customer",
+          "email_id": "c_2_refund_30",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 30.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 30.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 3,
+          "email_kind": "admin",
+          "email_id": "admin_3_refund_cap_50",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 4,
+          "email_kind": "customer",
+          "email_id": "c_4_chitchat_ooo",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 5,
+          "email_kind": "customer",
+          "email_id": "c_5_critical_payment_fail",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 6,
+          "email_kind": "customer",
+          "email_id": "c_6_info_missing_date",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "time_period"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "charge_date"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 0.5
+        },
+        {
+          "step": 7,
+          "email_kind": "customer",
+          "email_id": "c_7_chitchat_thanks",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 8,
+          "email_kind": "customer",
+          "email_id": "c_8_critical_payment_fail",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 9,
+          "email_kind": "customer",
+          "email_id": "c_9_refund_30",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 30.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 30.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 10,
+          "email_kind": "customer",
+          "email_id": "c_10_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 11,
+          "email_kind": "admin",
+          "email_id": "admin_11_escalate_keep_tier_2",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 12,
+          "email_kind": "customer",
+          "email_id": "c_12_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 13,
+          "email_kind": "customer",
+          "email_id": "c_13_chitchat_ooo",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 14,
+          "email_kind": "customer",
+          "email_id": "c_14_critical_data_loss",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 15,
+          "email_kind": "customer",
+          "email_id": "c_15_refund_40",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 16,
+          "email_kind": "customer",
+          "email_id": "c_16_refund_40",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 17,
+          "email_kind": "customer",
+          "email_id": "c_17_chitchat_thanks",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 18,
+          "email_kind": "customer",
+          "email_id": "c_18_critical_payment_fail",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 19,
+          "email_kind": "customer",
+          "email_id": "c_19_critical_data_loss",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.2,
+          "compliance": 0.7
+        }
+      ]
+    },
+    {
+      "seed": 103,
+      "total_reward": 26.2,
+      "max_reward": 30.0,
+      "frac_of_max": 0.8733,
+      "breakdown_totals": {
+        "compliance": 17.2,
+        "appropriateness": 9.0,
+        "drift_bonus": 0.0
+      },
+      "drift_sensitive_total": 2,
+      "drift_sensitive_correct": 0,
+      "drift_sensitive_acc": 0.0,
+      "per_drift": {
+        "sla_48hr": {
+          "total": 2,
+          "correct": 0
+        }
+      },
+      "trajectory": [
+        {
+          "step": 0,
+          "email_kind": "customer",
+          "email_id": "c_0_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 1,
+          "email_kind": "customer",
+          "email_id": "c_1_refund_50",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 2,
+          "email_kind": "customer",
+          "email_id": "c_2_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 3,
+          "email_kind": "admin",
+          "email_id": "admin_3_sla_48hr",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "error_fallback"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 4,
+          "email_kind": "customer",
+          "email_id": "c_4_info_missing_account",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "account_email"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "account_email"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 5,
+          "email_kind": "customer",
+          "email_id": "c_5_refund_60",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 60.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 60.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 6,
+          "email_kind": "customer",
+          "email_id": "c_6_refund_15",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 15.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 15.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 7,
+          "email_kind": "customer",
+          "email_id": "c_7_refund_50",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 8,
+          "email_kind": "customer",
+          "email_id": "c_8_critical_payment_fail",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": "sla_48hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 9,
+          "email_kind": "customer",
+          "email_id": "c_9_critical_data_loss",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": "sla_48hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 10,
+          "email_kind": "customer",
+          "email_id": "c_10_chitchat_thanks",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 11,
+          "email_kind": "admin",
+          "email_id": "admin_11_escalate_keep_tier_2",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 12,
+          "email_kind": "customer",
+          "email_id": "c_12_refund_100",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 100.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 100.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 13,
+          "email_kind": "customer",
+          "email_id": "c_13_refund_90",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 14,
+          "email_kind": "customer",
+          "email_id": "c_14_critical_payment_fail",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 15,
+          "email_kind": "customer",
+          "email_id": "c_15_refund_120",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 120.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 16,
+          "email_kind": "customer",
+          "email_id": "c_16_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 17,
+          "email_kind": "customer",
+          "email_id": "c_17_chitchat_ooo",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 18,
+          "email_kind": "customer",
+          "email_id": "c_18_chitchat_feedback",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 19,
+          "email_kind": "customer",
+          "email_id": "c_19_critical_payment_fail",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.2,
+          "compliance": 0.7
+        }
+      ]
+    },
+    {
+      "seed": 104,
+      "total_reward": 27.0,
+      "max_reward": 30.0,
+      "frac_of_max": 0.9,
+      "breakdown_totals": {
+        "compliance": 17.5,
+        "appropriateness": 9.0,
+        "drift_bonus": 0.5
+      },
+      "drift_sensitive_total": 4,
+      "drift_sensitive_correct": 2,
+      "drift_sensitive_acc": 0.5,
+      "per_drift": {
+        "refund_cap_200": {
+          "total": 2,
+          "correct": 2
+        },
+        "sla_2hr": {
+          "total": 2,
+          "correct": 0
+        }
+      },
+      "trajectory": [
+        {
+          "step": 0,
+          "email_kind": "customer",
+          "email_id": "c_0_refund_15",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 15.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 15.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 1,
+          "email_kind": "customer",
+          "email_id": "c_1_info_missing_order_id",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 2,
+          "email_kind": "customer",
+          "email_id": "c_2_info_missing_account",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "account_email"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "account_email"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 3,
+          "email_kind": "admin",
+          "email_id": "admin_3_refund_cap_200",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "error_fallback"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 4,
+          "email_kind": "customer",
+          "email_id": "c_4_info_missing_account",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "account_email"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "account_email"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 5,
+          "email_kind": "customer",
+          "email_id": "c_5_refund_180",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "drift_sensitive_to": "refund_cap_200",
+          "reward": 2.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 6,
+          "email_kind": "customer",
+          "email_id": "c_6_refund_30",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 30.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 30.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 7,
+          "email_kind": "customer",
+          "email_id": "c_7_billing_prorated",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 8,
+          "email_kind": "customer",
+          "email_id": "c_8_refund_180",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "drift_sensitive_to": "refund_cap_200",
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 9,
+          "email_kind": "customer",
+          "email_id": "c_9_info_missing_date",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "charge_date"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 0.5
+        },
+        {
+          "step": 10,
+          "email_kind": "customer",
+          "email_id": "c_10_critical_data_loss",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 24
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.9,
+          "compliance": 0.4
+        },
+        {
+          "step": 11,
+          "email_kind": "admin",
+          "email_id": "admin_11_sla_2hr",
+          "action": {
+            "action_type": "schedule_followup",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.2,
+          "compliance": 0.2
+        },
+        {
+          "step": 12,
+          "email_kind": "customer",
+          "email_id": "c_12_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "drift_sensitive_to": "sla_2hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 13,
+          "email_kind": "customer",
+          "email_id": "c_13_refund_120",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 120.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 120.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 14,
+          "email_kind": "customer",
+          "email_id": "c_14_info_missing_order_id",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 15,
+          "email_kind": "customer",
+          "email_id": "c_15_refund_50",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 50.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 16,
+          "email_kind": "customer",
+          "email_id": "c_16_billing_prorated",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 17,
+          "email_kind": "customer",
+          "email_id": "c_17_refund_180",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 18,
+          "email_kind": "customer",
+          "email_id": "c_18_billing_invoice_download",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 19,
+          "email_kind": "customer",
+          "email_id": "c_19_critical_auth_locked",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "drift_sensitive_to": "sla_2hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        }
+      ]
+    },
+    {
+      "seed": 105,
+      "total_reward": 22.6,
+      "max_reward": 30.0,
+      "frac_of_max": 0.7533,
+      "breakdown_totals": {
+        "compliance": 14.1,
+        "appropriateness": 8.5,
+        "drift_bonus": 0.0
+      },
+      "drift_sensitive_total": 3,
+      "drift_sensitive_correct": 0,
+      "drift_sensitive_acc": 0.0,
+      "per_drift": {
+        "sla_48hr": {
+          "total": 1,
+          "correct": 0
+        },
+        "escalate_manager": {
+          "total": 2,
+          "correct": 0
+        }
+      },
+      "trajectory": [
+        {
+          "step": 0,
+          "email_kind": "customer",
+          "email_id": "c_0_billing_prorated",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 1,
+          "email_kind": "customer",
+          "email_id": "c_1_refund_180",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 180.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 2,
+          "email_kind": "customer",
+          "email_id": "c_2_refund_250",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 250.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 3,
+          "email_kind": "admin",
+          "email_id": "admin_3_sla_48hr",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "error_fallback"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 4,
+          "email_kind": "customer",
+          "email_id": "c_4_refund_60",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 60.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 60.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 5,
+          "email_kind": "customer",
+          "email_id": "c_5_critical_outage",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": "sla_48hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 6,
+          "email_kind": "customer",
+          "email_id": "c_6_refund_75",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 7,
+          "email_kind": "customer",
+          "email_id": "c_7_chitchat_thanks",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 8,
+          "email_kind": "customer",
+          "email_id": "c_8_chitchat_feedback",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 9,
+          "email_kind": "customer",
+          "email_id": "c_9_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 10,
+          "email_kind": "customer",
+          "email_id": "c_10_info_missing_date",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "charge_date"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 0.5
+        },
+        {
+          "step": 11,
+          "email_kind": "admin",
+          "email_id": "admin_11_escalate_manager",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 12,
+          "email_kind": "customer",
+          "email_id": "c_12_critical_payment_fail",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": "escalate_manager",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 13,
+          "email_kind": "customer",
+          "email_id": "c_13_info_missing_order_id",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "invoice_details"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 0.5
+        },
+        {
+          "step": 14,
+          "email_kind": "customer",
+          "email_id": "c_14_info_missing_account",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "account_email"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.0,
+          "compliance": 0.0
+        },
+        {
+          "step": 15,
+          "email_kind": "customer",
+          "email_id": "c_15_refund_75",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 16,
+          "email_kind": "customer",
+          "email_id": "c_16_chitchat_thanks",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 17,
+          "email_kind": "customer",
+          "email_id": "c_17_chitchat_ooo",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 18,
+          "email_kind": "customer",
+          "email_id": "c_18_critical_api_down",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 48
+          },
+          "drift_sensitive_to": "escalate_manager",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 19,
+          "email_kind": "customer",
+          "email_id": "c_19_chitchat_ooo",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        }
+      ]
+    },
+    {
+      "seed": 106,
+      "total_reward": 23.8,
+      "max_reward": 30.0,
+      "frac_of_max": 0.7933,
+      "breakdown_totals": {
+        "compliance": 14.8,
+        "appropriateness": 9.0,
+        "drift_bonus": 0.0
+      },
+      "drift_sensitive_total": 4,
+      "drift_sensitive_correct": 0,
+      "drift_sensitive_acc": 0.0,
+      "per_drift": {
+        "sla_2hr": {
+          "total": 4,
+          "correct": 0
+        }
+      },
+      "trajectory": [
+        {
+          "step": 0,
+          "email_kind": "customer",
+          "email_id": "c_0_chitchat_feedback",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 1,
+          "email_kind": "customer",
+          "email_id": "c_1_refund_120",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "partner_account_id"
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 2,
+          "email_kind": "customer",
+          "email_id": "c_2_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 3,
+          "email_kind": "admin",
+          "email_id": "admin_3_sla_2hr",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "error_fallback"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 4,
+          "email_kind": "customer",
+          "email_id": "c_4_chitchat_feedback",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 5,
+          "email_kind": "customer",
+          "email_id": "c_5_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "drift_sensitive_to": "sla_2hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 6,
+          "email_kind": "customer",
+          "email_id": "c_6_billing_prorated",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 7,
+          "email_kind": "customer",
+          "email_id": "c_7_critical_security",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "drift_sensitive_to": "sla_2hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 8,
+          "email_kind": "customer",
+          "email_id": "c_8_critical_api_down",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "drift_sensitive_to": "sla_2hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 9,
+          "email_kind": "customer",
+          "email_id": "c_9_refund_75",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 10,
+          "email_kind": "customer",
+          "email_id": "c_10_critical_api_down",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_1",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "drift_sensitive_to": "sla_2hr",
+          "reward": 1.2,
+          "compliance": 0.7
+        },
+        {
+          "step": 11,
+          "email_kind": "admin",
+          "email_id": "admin_11_escalate_keep_tier_2",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 12,
+          "email_kind": "customer",
+          "email_id": "c_12_refund_150",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 150.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 13,
+          "email_kind": "customer",
+          "email_id": "c_13_refund_75",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 14,
+          "email_kind": "customer",
+          "email_id": "c_14_refund_40",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 40.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 15,
+          "email_kind": "customer",
+          "email_id": "c_15_refund_180",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 16,
+          "email_kind": "customer",
+          "email_id": "c_16_refund_75",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 17,
+          "email_kind": "customer",
+          "email_id": "c_17_billing_invoice_download",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 18,
+          "email_kind": "customer",
+          "email_id": "c_18_critical_auth_locked",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "tier_2",
+            "followup_hours": 2
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 19,
+          "email_kind": "customer",
+          "email_id": "c_19_refund_120",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 120.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 107,
+      "total_reward": 18.0,
+      "max_reward": 30.0,
+      "frac_of_max": 0.6,
+      "breakdown_totals": {
+        "compliance": 9.5,
+        "appropriateness": 8.5,
+        "drift_bonus": 0.0
+      },
+      "drift_sensitive_total": 3,
+      "drift_sensitive_correct": 0,
+      "drift_sensitive_acc": 0.0,
+      "per_drift": {
+        "refund_cap_25": {
+          "total": 3,
+          "correct": 0
+        }
+      },
+      "trajectory": [
+        {
+          "step": 0,
+          "email_kind": "customer",
+          "email_id": "c_0_chitchat_thanks",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 1,
+          "email_kind": "customer",
+          "email_id": "c_1_info_missing_account",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "account_email"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.0,
+          "compliance": 0.0
+        },
+        {
+          "step": 2,
+          "email_kind": "customer",
+          "email_id": "c_2_refund_30",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 30.0
+          },
+          "correct_hint": {
+            "action_type": "approve_refund",
+            "refund_amount": 30.0
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 3,
+          "email_kind": "admin",
+          "email_id": "admin_3_refund_cap_25",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 4,
+          "email_kind": "customer",
+          "email_id": "c_4_billing_prorated",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 5,
+          "email_kind": "customer",
+          "email_id": "c_5_billing_tiers",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 6,
+          "email_kind": "customer",
+          "email_id": "c_6_refund_90",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": "refund_cap_25",
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 7,
+          "email_kind": "customer",
+          "email_id": "c_7_chitchat_ooo",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "no_action_needed"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 8,
+          "email_kind": "customer",
+          "email_id": "c_8_refund_250",
+          "action": {
+            "action_type": "escalate",
+            "escalation_tier": "manager",
+            "followup_hours": 48
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 9,
+          "email_kind": "customer",
+          "email_id": "c_9_refund_75",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 75.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": "refund_cap_25",
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 10,
+          "email_kind": "customer",
+          "email_id": "c_10_refund_90",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 90.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": "refund_cap_25",
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 11,
+          "email_kind": "admin",
+          "email_id": "admin_11_escalate_tier_1",
+          "action": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "correct_hint": {
+            "action_type": "close",
+            "resolution_code": "policy_acknowledged"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 1.0
+        },
+        {
+          "step": 12,
+          "email_kind": "customer",
+          "email_id": "c_12_refund_120",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "partner_account_email"
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 13,
+          "email_kind": "customer",
+          "email_id": "c_13_refund_120",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "partner_account_id"
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 14,
+          "email_kind": "customer",
+          "email_id": "c_14_refund_100",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 100.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 15,
+          "email_kind": "customer",
+          "email_id": "c_15_refund_150",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 150.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 16,
+          "email_kind": "customer",
+          "email_id": "c_16_refund_150",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 150.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        },
+        {
+          "step": 17,
+          "email_kind": "customer",
+          "email_id": "c_17_info_missing_order_id",
+          "action": {
+            "action_type": "request_info",
+            "info_field": "invoice_details"
+          },
+          "correct_hint": {
+            "action_type": "request_info",
+            "info_field": "order_id"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.0,
+          "compliance": 0.5
+        },
+        {
+          "step": 18,
+          "email_kind": "customer",
+          "email_id": "c_18_billing_prorated",
+          "action": {
+            "action_type": "reply"
+          },
+          "correct_hint": {
+            "action_type": "reply"
+          },
+          "drift_sensitive_to": null,
+          "reward": 1.5,
+          "compliance": 1.0
+        },
+        {
+          "step": 19,
+          "email_kind": "customer",
+          "email_id": "c_19_refund_100",
+          "action": {
+            "action_type": "approve_refund",
+            "refund_amount": 100.0
+          },
+          "correct_hint": {
+            "action_type": "escalate",
+            "escalation_tier": "manager"
+          },
+          "drift_sensitive_to": null,
+          "reward": 0.5,
+          "compliance": 0.0
+        }
+      ]
+    }
+  ]
+}
