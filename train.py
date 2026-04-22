@@ -17,10 +17,20 @@ from __future__ import annotations
 import os
 import random
 import sys
+import warnings
 from typing import Optional
 
 import numpy as np
 import torch
+
+# Silence transformers generation-config spam during offline eval
+warnings.filterwarnings("ignore", message="Both `max_new_tokens`.*")
+warnings.filterwarnings("ignore", category=FutureWarning, module="transformers")
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+
+# Module-level globals; real values set in main() after GPU detection.
+USE_BF16: bool = False
+USE_FP16: bool = False
 
 from drift_env.dataset import build_dataset, dataset_stats
 from drift_env.prompts import SYSTEM_PROMPT
@@ -74,6 +84,17 @@ def seed_all(s: int) -> None:
     random.seed(s); np.random.seed(s); torch.manual_seed(s)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(s)
+
+
+def _precision_flags() -> tuple[bool, bool]:
+    """Return (use_bf16, use_fp16). T4 (Turing, CC 7.5) doesn't support bf16 —
+    only Ampere (CC 8.0) and later do. Fall back to fp16 on T4."""
+    if not torch.cuda.is_available():
+        return False, False
+    major, _ = torch.cuda.get_device_capability()
+    if major >= 8:
+        return True, False   # Ampere+ — use bf16
+    return False, True       # T4 etc — use fp16
 
 
 # ---------------------------------------------------------------------------
@@ -152,7 +173,8 @@ def run_sft(model, tokenizer, train_ds):
         learning_rate=SFT_LR,
         logging_steps=10,
         save_strategy="no",
-        bf16=torch.cuda.is_available(),
+        bf16=USE_BF16,
+        fp16=USE_FP16,
         report_to="wandb" if USE_WANDB else "none",
         seed=SEED,
         max_length=MAX_SEQ_LEN,
@@ -183,7 +205,8 @@ def run_grpo(model, tokenizer, train_ds, eval_ds):
         max_steps=GRPO_MAX_STEPS,
         logging_steps=5,
         save_strategy="no",
-        bf16=torch.cuda.is_available(),
+        bf16=USE_BF16,
+        fp16=USE_FP16,
         report_to="wandb" if USE_WANDB else "none",
         seed=SEED,
         # Keep rollouts fast for Colab:
@@ -227,9 +250,11 @@ def offline_eval(model, tokenizer, eval_ds, label: str, max_rows: int = 200):
         ).to(model.device)
         with torch.no_grad():
             out = model.generate(
-                inputs, max_new_tokens=GRPO_MAX_COMPLETION,
-                do_sample=False, temperature=1.0, top_p=1.0,
+                inputs,
+                max_new_tokens=GRPO_MAX_COMPLETION,
+                do_sample=False,
                 pad_token_id=tokenizer.eos_token_id,
+                use_cache=True,
             )
         text = tokenizer.decode(out[0][inputs.shape[1]:], skip_special_tokens=True)
         r = total_reward(
@@ -271,8 +296,16 @@ def main() -> int:
     seed_all(SEED)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+    global USE_BF16, USE_FP16
+    USE_BF16, USE_FP16 = _precision_flags()
+
     print(f"QUICK_MODE={QUICK_MODE}  MODEL={MODEL_NAME}")
-    print(f"CUDA available: {torch.cuda.is_available()}")
+    if torch.cuda.is_available():
+        name = torch.cuda.get_device_name(0)
+        cap = torch.cuda.get_device_capability(0)
+        print(f"GPU: {name}  capability={cap}  bf16={USE_BF16}  fp16={USE_FP16}")
+    else:
+        print("CUDA not available — training will be extremely slow")
 
     sft_train, grpo_train, grpo_eval = build_hf_datasets()
     model, tokenizer = load_model_and_tokenizer()
