@@ -17,7 +17,7 @@ An OpenEnv benchmark that measures (and trains out) a specific failure mode in d
 
 The environment simulates a customer-support inbox where policies drift mid-episode. An agent receives 20 emails per episode, and at 2 fixed positions an *admin email* arrives announcing a rule change (e.g. "refund cap lowered from $100 to $50"). The agent must read, remember, and apply the new rule to subsequent tickets.
 
-We call this the **leniency bias**. In our 8-episode baseline with Llama 3.1 8B: **0% accuracy on rules that tighten, 100% on rules that loosen.** LeniencyBench is the training target that closes that gap.
+We call this the **leniency bias**. In our 8-episode baseline with Llama 3.1 8B, the gap is clean: **0% accuracy (0/17) on rules that tighten vs 37.5% (3/8) on rules that loosen**. The base model is systematically worse whenever the new rule is stricter than its internet prior. LeniencyBench is the training target that closes that gap.
 
 Built for the Meta PyTorch × Hugging Face OpenEnv Hackathon (Round 2).
 **Bonus-prize fit:** Patronus AI (schema drift) + Scale AI (long-horizon business workflows).
