@@ -1,7 +1,7 @@
 [project]
-name = "email-triage"
+name = "policy-drift"
 version = "1.0.0"
-description = "Email Triage and Response OpenEnv Environment"
+description = "Policy-Drift OpenEnv — customer-support triage where rules drift mid-episode"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.110.0",

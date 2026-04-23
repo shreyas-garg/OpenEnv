@@ -1,10 +1,10 @@
 """
-Root-level server/app.py — re-exports the FastAPI app from email_env
-and provides a main() entry point for OpenEnv validator.
+Root-level server/app.py — re-exports the FastAPI app from drift_env
+and provides a main() entry point for OpenEnv validator / uvicorn.
 """
 
 import uvicorn
-from email_env.server.app import app  # noqa: F401
+from drift_env.server.app import app  # noqa: F401
 
 
 def main():

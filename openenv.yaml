@@ -1,5 +1,5 @@
 spec_version: 1
-name: email-triage
+name: policy-drift
 type: space
 runtime: fastapi
 app: server.app:app

@@ -1,190 +1,156 @@
 ---
-title: OpenEnv
-emoji: 📈
+title: Policy Drift OpenEnv
+emoji: 📉
 colorFrom: indigo
-colorTo: blue
+colorTo: purple
 sdk: docker
 app_port: 7860
 pinned: false
 license: mit
+tags:
+  - openenv
 ---
 
-# Email Triage and Response System — OpenEnv
+# Policy Drift OpenEnv
 
-An OpenEnv-compliant environment where an AI agent reads incoming emails, classifies them, assigns a priority, and writes an appropriate response.
+A multi-step customer-support triage environment where **policy rules drift mid-episode**. An AI agent receives 20 emails per episode, and at 2 fixed positions an *admin email* arrives announcing a rule change (e.g. "refund cap lowered from $100 to $50"). The agent must read, remember, and apply the new rule to subsequent tickets.
 
-## Problem Description
+Built for the Meta PyTorch × Hugging Face OpenEnv Hackathon (Round 2).
+**Bonus-prize fit:** Patronus AI (schema drift) + Scale AI (long-horizon business workflows).
 
-Customer support teams receive hundreds of emails daily. This environment simulates the core triage challenge: given an email, an agent must:
+## Why this is different
 
-1. **Classify** it — `billing`, `technical`, or `general`
-2. **Prioritize** it — `low`, `medium`, or `high`
-3. **Respond** — write a professional reply
+Most existing RL environments have static rules. This one models the single most common failure mode of deployed agents: *the rules change, and the agent confidently applies the old ones*. Training on this env produces agents that attend to policy updates across long contexts instead of autopiloting internet priors.
 
-This is a real-world task performed daily by support teams, and a natural fit for LLM-based agents.
+## Observation space
 
-## Observation Space
+| Field | Type | Description |
+|---|---|---|
+| `current_email` | `Email` | Subject, body, sender, kind (customer or admin) |
+| `email_index` | int | 0-based position in the 20-email episode |
+| `total_emails` | int | Always 20 |
+| `inbox_history` | list[dict] | Prior emails + the action the agent already took on each |
 
-| Field         | Type   | Values                             |
-|---------------|--------|------------------------------------|
-| `email_text`  | string | Full email body                    |
-| `sender_type` | string | `customer` / `internal` / `system` |
+## Action space (6 discrete actions)
 
-## Action Space
+| Action | Parameters |
+|---|---|
+| `reply` | — |
+| `approve_refund` | `refund_amount: float` |
+| `escalate` | `escalation_tier: tier_1/tier_2/manager`, `followup_hours: int` |
+| `schedule_followup` | `followup_hours: int` |
+| `close` | `resolution_code: str` |
+| `request_info` | `info_field: str` |
 
-| Field      | Type   | Values                               |
-|------------|--------|--------------------------------------|
-| `category` | string | `billing` / `technical` / `general`  |
-| `priority` | string | `low` / `medium` / `high`            |
-| `response` | string | Free-form reply text                 |
+## Drift scenarios (3 types × 3 variants = 9)
 
-## Tasks
+- **Refund cap** — `$100 → $25 / $50 / $200`
+- **Critical escalation routing** — `tier_2 → tier_1 / manager / no-change`
+- **Critical SLA window** — `24h → 2h / 4h / 48h`
 
-| ID     | Difficulty | Description |
-|--------|------------|-------------|
-| task_1 | Easy       | Simple general inquiry about support hours and live chat |
-| task_2 | Easy       | Clear billing complaint — duplicate charge, obvious category |
-| task_3 | Medium     | Angry customer — app crash + billing issue + 48h no support reply |
-| task_4 | Medium     | System alert — production database lag, stale data, checkout impacted |
-| task_5 | Hard       | Genuinely ambiguous — looks like billing but root cause is technical (upgrade not flipped) |
+Each episode samples **two** drifts from different types (so they stack). Admin emails land at positions `[3, 11]`.
 
-## Reward Function
+## Reward function (deterministic, 3-component, [0, 2])
 
-| Component        | Weight | Condition                              |
-|------------------|--------|----------------------------------------|
-| Category correct | +0.4   | Exact match with expected category     |
-| Priority correct | +0.3   | Exact match with expected priority     |
-| Response quality | +0.3   | Hybrid score (see below)               |
-| Empty response   | −0.2   | Penalty if response is blank           |
+| Component | Weight | What it scores |
+|---|---|---|
+| **Compliance** | 0 – 1.0 | Exact match on policy-dependent fields (refund amount, tier, SLA hours) |
+| **Appropriateness** | 0 – 0.5 | Action *type* sensible for the email kind |
+| **Drift-attention bonus** | 0 – 0.5 | +0.5 the FIRST time the agent nails a drift-sensitive step after each drift fires |
 
-Total score range: **0.0 – 1.0** (continuous, with partial credit).
+No LLM-as-judge anywhere in the reward path. Ground truth is pre-computed via a deterministic table lookup; reward is reproducible byte-for-byte across runs.
 
-### Response Quality (hybrid, anti-gaming)
+## Adversarial sanity check
 
-The response quality score combines three signals to defeat keyword-stuffing exploits:
+Seven constant-action baselines (always-close, always-approve-$40, always-escalate-manager, etc.) all score under **41% of max** across 20 seeds. A perfect policy hits **~100%**. This ~60 pp gap is the training signal.
 
-1. **Keyword coverage (40%)** — distinct keywords present
-2. **Length & coherence (20%)** — penalises too-short, no-punctuation, repetitive token, and ALL-CAPS responses
-3. **Structural requirement (40%)** — must contain BOTH an acknowledgement (sorry/apologise/thank) AND an action/timeline phrase (will/investigate/refund/escalate/...)
+## Baseline numbers
 
-This means a response like `"refund refund refund refund refund"` scores well below 0.4, while a genuine professional reply like `"We sincerely apologise for the duplicate charge. Our team will refund your account within 3-5 business days."` scores above 0.9.
+| Model | Source | Overall reward | Drift-sensitive accuracy |
+|---|---|---|---|
+| Llama 3.1 8B | Groq API, 8 episodes | 23.1 / 30 (77%) | **12%** |
+| Qwen 2.5 0.5B (raw) | Colab T4 | 0.62 / 2 per step | **0%** |
+| Qwen 2.5 0.5B (post-SFT) | Colab T4, 1 epoch | 1.37 / 2 per step | **50%** |
 
-## Baseline Scores
+3B training numbers will be produced onsite with HF compute credits.
 
-Model: `llama-3.1-8b-instant` via Groq (OpenAI-compatible endpoint)
+## API
 
-| Task   | Difficulty | Score |
-|--------|------------|-------|
-| task_1 | Easy       | 0.92  |
-| task_2 | Easy       | 0.95  |
-| task_3 | Medium     | 0.91  |
-| task_4 | Medium     | 0.94  |
-| task_5 | Hard       | 0.65  |
-| **Avg** |           | **0.87** |
+### `POST /reset`
+Body: `{"seed": 0, "episode_id": "ep_0"}` (both optional).
+Returns the initial `Observation`.
 
-Full baseline trace is committed at [baseline_output.txt](baseline_output.txt).
-To reproduce:
+### `POST /step`
+Body: a single `Action` JSON object.
+Returns `StepResult { observation, reward, done, info }`.
 
-```bash
-API_BASE_URL=https://api.groq.com/openai/v1 \
-HF_TOKEN=<your-key> \
-MODEL_NAME=llama-3.1-8b-instant \
-PYTHONPATH=. python3 inference.py
-```
+### `GET /state`
+Returns a snapshot of the current episode state.
 
-## Tests
+### `GET /`
+Returns a name/version/description blob.
 
-24 unit tests covering grader robustness (including adversarial keyword-stuffing inputs) and environment lifecycle:
+## Example
 
 ```bash
-PYTHONPATH=. python3 -m pytest tests/ -v
+# Start an episode
+curl -X POST https://shreyas-garg-drift-env.hf.space/reset \
+  -H "Content-Type: application/json" \
+  -d '{"seed": 42}'
+
+# Submit an action
+curl -X POST https://shreyas-garg-drift-env.hf.space/step \
+  -H "Content-Type: application/json" \
+  -d '{"action_type": "approve_refund", "refund_amount": 40.0}'
 ```
 
-## Setup
+## Run locally
 
 ```bash
 pip install -r requirements.txt
+PYTHONPATH=. uvicorn drift_env.server.app:app --host 0.0.0.0 --port 7860
+
+# or in Docker:
+docker build -t drift-env .
+docker run -p 7860:7860 drift-env
 ```
 
-## Run the Server
+## Training
 
-```bash
-# Local
-PYTHONPATH=. uvicorn email_env.server.app:app --host 0.0.0.0 --port 7860
+End-to-end SFT warm-up + GRPO pipeline lives in `train.py` and `train_colab.ipynb` at the repo root. Uses Unsloth + HF TRL. Starts from Qwen 2.5 0.5B/3B, saves LoRA adapters. See the Colab notebook for a runnable setup.
 
-# Docker
-docker build -t email-triage .
-docker run -p 7860:7860 email-triage
-```
-
-## Run Inference
-
-```bash
-API_BASE_URL=https://router.huggingface.co/v1 \
-MODEL_NAME=meta-llama/Llama-3.1-8B-Instruct \
-HF_TOKEN=hf_... \
-PYTHONPATH=. python3 inference.py
-```
-
-## Example API Calls
-
-### Reset (start a task)
-```bash
-curl -X POST http://localhost:7860/reset \
-  -H "Content-Type: application/json" \
-  -d '{"task_id": "task_1"}'
-```
-
-### Step (submit an action)
-```bash
-curl -X POST http://localhost:7860/step \
-  -H "Content-Type: application/json" \
-  -d '{
-    "category": "billing",
-    "priority": "high",
-    "response": "We apologize for the duplicate charge. We will issue a full refund within 3-5 business days."
-  }'
-```
-
-### Get State
-```bash
-curl http://localhost:7860/state
-```
-
-### List Tasks
-```bash
-curl http://localhost:7860/tasks
-```
-
-### Grade Directly
-```bash
-curl -X POST http://localhost:7860/grader \
-  -H "Content-Type: application/json" \
-  -d '{
-    "task_id": "task_1",
-    "category": "billing",
-    "priority": "high",
-    "response": "We apologize and will refund your account."
-  }'
-```
-
-## Project Structure
+## Project layout
 
 ```
 .
-├── Dockerfile           # Root Dockerfile for HF Spaces
+├── Dockerfile               # HF Space entrypoint (port 7860)
+├── openenv.yaml             # OpenEnv spec_version 1
+├── pyproject.toml
 ├── requirements.txt
-├── inference.py         # Mandatory inference script (uses OpenAI client)
-├── README.md
-└── email_env/
-    ├── models.py        # Pydantic: Observation, Action, StepResult, State
-    ├── tasks.py         # 5 tasks (easy → hard) with expected outputs
-    ├── grader.py        # Deterministic scoring (0.0–1.0)
-    ├── client.py        # Python HTTP client
-    ├── baseline.py      # Alternate baseline using Groq
-    ├── openenv.yaml     # OpenEnv spec metadata
-    └── server/
-        ├── environment.py  # Core env: reset(), step(), state()
-        ├── app.py          # FastAPI server
-        └── Dockerfile      # Alternate Dockerfile
+├── train.py                 # SFT + GRPO training loop
+├── train_colab.ipynb        # Colab-runnable notebook
+├── server/
+│   └── app.py               # re-exports drift_env.server.app (validator convention)
+└── drift_env/
+    ├── models.py            # Pydantic Observation / Action / StepResult / State
+    ├── policy.py            # PolicyState + 9 DriftEvent scenarios
+    ├── emails.py            # 28 customer email templates
+    ├── episodes.py          # Deterministic 20-email episode generator
+    ├── grader.py            # 3-component deterministic reward
+    ├── environment.py       # DriftEnv: reset / step / state
+    ├── dataset.py           # Episodes -> training rows for SFT/GRPO
+    ├── llm_agent.py         # OpenAI-client agent (used in eval_baseline.py)
+    ├── prompts.py           # System + user prompt rendering
+    ├── training/rewards.py  # TRL-compatible reward functions (3 independent)
+    ├── server/app.py        # FastAPI server
+    └── tests/               # 35+ unit + adversarial tests
 ```
+
+## Links
+
+- **Live Space**: [huggingface.co/spaces/shreyas-garg/drift-env](https://huggingface.co/spaces/shreyas-garg/drift-env)
+- **GitHub**: [github.com/shreyas-garg/OpenEnv](https://github.com/shreyas-garg/OpenEnv)
+
+## License
+
+MIT.
