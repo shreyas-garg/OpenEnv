@@ -8,19 +8,21 @@ from pydantic import BaseModel
 from drift_env.environment import DriftEnv
 from drift_env.models import Action, Observation, State, StepResult
 
-app = FastAPI(title="Policy Drift OpenEnv", version="0.1.0")
+app = FastAPI(title="LeniencyBench", version="0.1.0")
 env = DriftEnv()
 
 
 @app.get("/")
 def root():
     return {
-        "name": "policy-drift",
+        "name": "LeniencyBench",
+        "code_name": "policy-drift",
         "version": "0.1.0",
         "description": (
-            "Multi-step support-triage environment where policy rules drift "
-            "mid-episode via admin emails. Agent must infer current policy "
-            "from admin messages and apply it to subsequent customer tickets."
+            "An OpenEnv benchmark that measures and trains out LLM leniency "
+            "bias: the tendency to apply old/loose policies even after an "
+            "admin message tightens the rule. 20-email customer-support "
+            "episodes with 2 policy drifts per episode at fixed positions."
         ),
         "endpoints": ["/reset", "/step", "/state"],
     }

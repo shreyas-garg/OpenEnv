@@ -1,5 +1,5 @@
 ---
-title: Policy Drift OpenEnv
+title: LeniencyBench
 emoji: 📉
 colorFrom: indigo
 colorTo: purple
@@ -11,16 +11,24 @@ tags:
   - openenv
 ---
 
-# Policy Drift OpenEnv
+# LeniencyBench
 
-A multi-step customer-support triage environment where **policy rules drift mid-episode**. An AI agent receives 20 emails per episode, and at 2 fixed positions an *admin email* arrives announcing a rule change (e.g. "refund cap lowered from $100 to $50"). The agent must read, remember, and apply the new rule to subsequent tickets.
+An OpenEnv benchmark that measures (and trains out) a specific failure mode in deployed LLMs: **when a rule gets stricter, the model ignores it and keeps applying the looser rule it saw on the internet.**
+
+The environment simulates a customer-support inbox where policies drift mid-episode. An agent receives 20 emails per episode, and at 2 fixed positions an *admin email* arrives announcing a rule change (e.g. "refund cap lowered from $100 to $50"). The agent must read, remember, and apply the new rule to subsequent tickets.
+
+We call this the **leniency bias**. In our 8-episode baseline with Llama 3.1 8B: **0% accuracy on rules that tighten, 100% on rules that loosen.** LeniencyBench is the training target that closes that gap.
 
 Built for the Meta PyTorch × Hugging Face OpenEnv Hackathon (Round 2).
 **Bonus-prize fit:** Patronus AI (schema drift) + Scale AI (long-horizon business workflows).
 
-## Why this is different
+## The leniency bias in one paragraph
 
-Most existing RL environments have static rules. This one models the single most common failure mode of deployed agents: *the rules change, and the agent confidently applies the old ones*. Training on this env produces agents that attend to policy updates across long contexts instead of autopiloting internet priors.
+A pretrained LLM has seen millions of customer-support conversations on the internet. Most of them default to "approve the refund", "apologize and resolve", "be lenient". When you deploy it and change a policy — say, tighten the refund cap — the model doesn't actually listen. It autopilots its internet prior. This is why agents built on generic LLMs silently fail the moment a real company's rules diverge from what the internet made them expect. LeniencyBench measures this directly, and is the training target that closes it.
+
+## Why this environment is different
+
+Most RL environments have static rules. This one makes the rule itself the thing that changes. Training on LeniencyBench produces agents that attend to policy updates across long contexts instead of autopiloting priors.
 
 ## Observation space
 

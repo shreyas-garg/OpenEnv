@@ -187,6 +187,11 @@ def run_sft(model, tokenizer, train_ds):
     )
     print(f"\n=== SFT warm-up: {len(train_ds)} samples, {SFT_EPOCHS} epoch(s) ===")
     trainer.train()
+    # Save structured log history for plotting.
+    import json as _json
+    with open(f"{OUTPUT_DIR}/sft_log.json", "w") as f:
+        _json.dump(trainer.state.log_history, f, indent=2)
+    print(f"SFT log saved -> {OUTPUT_DIR}/sft_log.json")
     return trainer.model
 
 
@@ -227,6 +232,11 @@ def run_grpo(model, tokenizer, train_ds, eval_ds):
         eval_dataset=eval_ds,
     )
     trainer.train()
+    # Save structured log history for plotting.
+    import json as _json
+    with open(f"{OUTPUT_DIR}/grpo_log.json", "w") as f:
+        _json.dump(trainer.state.log_history, f, indent=2)
+    print(f"GRPO log saved -> {OUTPUT_DIR}/grpo_log.json")
     return trainer.model
 
 
@@ -234,13 +244,22 @@ def run_grpo(model, tokenizer, train_ds, eval_ds):
 # 5. Offline eval (drift-sensitive accuracy before vs after)
 # ---------------------------------------------------------------------------
 def offline_eval(model, tokenizer, eval_ds, label: str, max_rows: int = 200):
-    """Greedy-decode each eval prompt, score with total_reward, print summary."""
+    """Greedy-decode each eval prompt, score with total_reward, print summary.
+
+    Logs drift-sensitive accuracy broken down by drift direction
+    (tightening / loosening / neutral). The *tightening* number is the one
+    that actually matters for the pitch — it measures the leniency bias
+    that our training specifically aims to remove. Loosening accuracy is
+    often high even pre-training because the looser rule matches the base
+    model's internet prior.
+    """
     from drift_env.training.rewards import parse_generated_action, total_reward
+    from drift_env.policy import drift_direction
     model.eval()
-    from transformers import TextStreamer  # noqa: F401 (useful in notebooks)
 
     comp_total = appr_total = bonus_total = 0.0
     drift_total = drift_correct = 0
+    per_dir = {"tightening": [0, 0], "loosening": [0, 0], "neutral": [0, 0]}  # [correct, total]
     n = min(len(eval_ds), max_rows)
     for i in range(n):
         row = eval_ds[i]
@@ -268,12 +287,26 @@ def offline_eval(model, tokenizer, eval_ds, label: str, max_rows: int = 200):
         comp_total += r["compliance"]
         appr_total += r["appropriateness"]
         bonus_total += r["drift_bonus"]
+        # per-direction tracking: a row counts only if it is drift-sensitive
+        # (i.e. the correct answer is different from what it'd be pre-drift)
+        drift_to = row["drift_sensitive_to"] or None
+        if drift_to:
+            direction = drift_direction(drift_to)
+            if direction is not None:
+                per_dir[direction][1] += 1
+                if r["compliance"] >= 1.0:
+                    per_dir[direction][0] += 1
         if row["can_earn_drift_bonus"]:
             drift_total += 1
             if r["compliance"] >= 1.0:
                 drift_correct += 1
 
     drift_acc = drift_correct / drift_total if drift_total else None
+    def _acc(pair):
+        c, t = pair
+        return (c / t) if t else None
+    per_dir_acc = {k: _acc(v) for k, v in per_dir.items()}
+
     print(f"\n=== Offline eval [{label}] over {n} samples ===")
     print(f"  compliance avg     : {comp_total / n:.3f} / 1.0")
     print(f"  appropriateness avg: {appr_total / n:.3f} / 0.5")
@@ -281,11 +314,18 @@ def offline_eval(model, tokenizer, eval_ds, label: str, max_rows: int = 200):
     print(f"  total avg          : {(comp_total + appr_total + bonus_total) / n:.3f} / 2.0")
     if drift_acc is not None:
         print(f"  drift-sens acc     : {drift_acc:.1%}  ({drift_correct}/{drift_total})")
+    for direction in ("tightening", "loosening", "neutral"):
+        c, t = per_dir[direction]
+        acc_str = f"{c/t:.1%}" if t else "n/a"
+        print(f"    {direction:<11}: {acc_str}  ({c}/{t})")
+
     return {
         "compliance": comp_total / n,
         "appropriateness": appr_total / n,
         "drift_bonus": bonus_total / n,
         "drift_acc": drift_acc,
+        "drift_acc_by_direction": per_dir_acc,
+        "drift_counts_by_direction": {k: {"correct": v[0], "total": v[1]} for k, v in per_dir.items()},
     }
 
 
@@ -324,8 +364,22 @@ def main() -> int:
     print("\n=== Improvement summary ===")
     for k in ("compliance", "appropriateness", "drift_bonus"):
         print(f"  {k:<20} {pre[k]:.3f}  ->  {post_sft[k]:.3f}  ->  {post_grpo[k]:.3f}")
-    print(f"  drift-sensitive acc  {_fmt_acc(pre['drift_acc'])} -> "
+    print(f"  drift-sens acc (all) {_fmt_acc(pre['drift_acc'])} -> "
           f"{_fmt_acc(post_sft['drift_acc'])} -> {_fmt_acc(post_grpo['drift_acc'])}")
+    for direction in ("tightening", "loosening", "neutral"):
+        pre_a = pre["drift_acc_by_direction"].get(direction)
+        sft_a = post_sft["drift_acc_by_direction"].get(direction)
+        grpo_a = post_grpo["drift_acc_by_direction"].get(direction)
+        print(f"    {direction:<12}     {_fmt_acc(pre_a)} -> {_fmt_acc(sft_a)} -> {_fmt_acc(grpo_a)}")
+
+    # Save eval snapshots for the plotting script.
+    import json as _json
+    with open(f"{OUTPUT_DIR}/evals.json", "w") as f:
+        _json.dump({
+            "pre": pre, "post_sft": post_sft, "post_grpo": post_grpo,
+            "model_name": MODEL_NAME, "quick_mode": QUICK_MODE,
+        }, f, indent=2, default=str)
+    print(f"Eval snapshots saved -> {OUTPUT_DIR}/evals.json")
 
     # Save LoRA adapters ONLY (organizer warning: do not naively merge 4-bit).
     adapter_path = f"{OUTPUT_DIR}/lora_adapters"

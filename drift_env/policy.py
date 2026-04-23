@@ -26,10 +26,21 @@ class Policy:
 # ---------------------------------------------------------------------------
 
 
+Direction = Literal["tightening", "loosening", "neutral"]
+
+
 @dataclass(frozen=True)
 class DriftEvent:
     """A single drift event delivered via an admin email."""
     name: str
+    # Direction captures whether the new rule is STRICTER than the default
+    # ("tightening" — agents with internet priors will get this wrong),
+    # LOOSER than the default ("loosening" — base models already handle this
+    # by accident because it matches their lenient prior), or unchanged
+    # ("neutral" — acts as a distractor). This is the single most important
+    # piece of instrumentation for the pitch story: measure drift-sensitive
+    # accuracy separately on tightening vs loosening drifts.
+    direction: Direction
     admin_subject: str
     admin_body: str
 
@@ -61,6 +72,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     # --- refund cap changes -------------------------------------------------
     "refund_cap_50": DriftEvent(
         name="refund_cap_50",
+        direction="tightening",
         admin_subject="Policy update: refund approval threshold",
         admin_body=(
             "Team — effective immediately, the auto-approval cap for customer "
@@ -71,6 +83,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     ),
     "refund_cap_25": DriftEvent(
         name="refund_cap_25",
+        direction="tightening",
         admin_subject="Q2 budget controls — refund changes",
         admin_body=(
             "Hi all, due to Q2 budget tightening the refund auto-approval cap "
@@ -81,6 +94,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     ),
     "refund_cap_200": DriftEvent(
         name="refund_cap_200",
+        direction="loosening",
         admin_subject="Refund policy loosened for retention push",
         admin_body=(
             "Everyone — for the next retention campaign, refund auto-approval "
@@ -93,6 +107,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     # --- escalation routing changes ----------------------------------------
     "escalate_manager": DriftEvent(
         name="escalate_manager",
+        direction="tightening",
         admin_subject="Critical-issue routing change",
         admin_body=(
             "FYI — all critical-severity customer issues must now route "
@@ -103,6 +118,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     ),
     "escalate_tier_1": DriftEvent(
         name="escalate_tier_1",
+        direction="loosening",
         admin_subject="Tier 1 expanded — critical handling",
         admin_body=(
             "Team — we've trained Tier 1 on critical incident handling. Route "
@@ -113,6 +129,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     ),
     "escalate_keep_tier_2": DriftEvent(
         name="escalate_keep_tier_2",
+        direction="neutral",
         admin_subject="Routing confirmation — no change",
         admin_body=(
             "Quick confirmation: critical issues continue to route to Tier 2. "
@@ -125,6 +142,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     # --- SLA changes --------------------------------------------------------
     "sla_2hr": DriftEvent(
         name="sla_2hr",
+        direction="tightening",
         admin_subject="Critical SLA tightened to 2 hours",
         admin_body=(
             "Per the updated enterprise contract, critical-severity issues "
@@ -135,6 +153,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     ),
     "sla_4hr": DriftEvent(
         name="sla_4hr",
+        direction="tightening",
         admin_subject="SLA adjustment — critical issues",
         admin_body=(
             "Small change — critical-issue response SLA is now 4 hours "
@@ -145,6 +164,7 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
     ),
     "sla_48hr": DriftEvent(
         name="sla_48hr",
+        direction="loosening",
         admin_subject="SLA relaxed during platform migration",
         admin_body=(
             "During the platform migration this week, critical-issue SLA is "
@@ -158,3 +178,12 @@ DRIFT_EVENTS: dict[str, DriftEvent] = {
 
 def list_drift_events() -> list[str]:
     return list(DRIFT_EVENTS.keys())
+
+
+def drift_direction(name: str | None) -> Direction | None:
+    """Look up the direction label of a drift event by name. Returns None if
+    the name is unknown or None."""
+    if name is None:
+        return None
+    ev = DRIFT_EVENTS.get(name)
+    return ev.direction if ev else None

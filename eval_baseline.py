@@ -34,6 +34,7 @@ from dotenv import load_dotenv
 from drift_env.environment import DriftEnv
 from drift_env.llm_agent import LLMAgent
 from drift_env.episodes import generate_episode
+from drift_env.policy import drift_direction
 
 load_dotenv()
 
@@ -52,6 +53,9 @@ def run_one_episode(
     per_drift: dict[str, dict[str, int]] = defaultdict(
         lambda: {"total": 0, "correct": 0}
     )
+    per_direction: dict[str, dict[str, int]] = defaultdict(
+        lambda: {"total": 0, "correct": 0}
+    )
     trajectory = []
 
     for i, step_plan in enumerate(ep_plan.steps):
@@ -67,9 +71,14 @@ def run_one_episode(
         if sensitive_to is not None:
             drift_sensitive_total += 1
             per_drift[sensitive_to]["total"] += 1
+            direction = drift_direction(sensitive_to)
+            if direction is not None:
+                per_direction[direction]["total"] += 1
             if is_correct:
                 drift_sensitive_correct += 1
                 per_drift[sensitive_to]["correct"] += 1
+                if direction is not None:
+                    per_direction[direction]["correct"] += 1
 
         trajectory.append({
             "step": i,
@@ -105,6 +114,7 @@ def run_one_episode(
             if drift_sensitive_total else None
         ),
         "per_drift": {k: dict(v) for k, v in per_drift.items()},
+        "per_direction": {k: dict(v) for k, v in per_direction.items()},
         "trajectory": trajectory,
     }
 
@@ -119,10 +129,16 @@ def summarise(results: list[dict[str, Any]]) -> dict[str, Any]:
     per_drift_agg: dict[str, dict[str, int]] = defaultdict(
         lambda: {"total": 0, "correct": 0}
     )
+    per_direction_agg: dict[str, dict[str, int]] = defaultdict(
+        lambda: {"total": 0, "correct": 0}
+    )
     for r in results:
         for name, stats in r["per_drift"].items():
             per_drift_agg[name]["total"] += stats["total"]
             per_drift_agg[name]["correct"] += stats["correct"]
+        for direction, stats in r.get("per_direction", {}).items():
+            per_direction_agg[direction]["total"] += stats["total"]
+            per_direction_agg[direction]["correct"] += stats["correct"]
 
     return {
         "episodes": n,
@@ -131,6 +147,13 @@ def summarise(results: list[dict[str, Any]]) -> dict[str, Any]:
         "drift_sensitive_total": dst,
         "drift_sensitive_correct": dsc,
         "drift_sensitive_acc": round(dsc / dst, 4) if dst else None,
+        "per_direction": {
+            k: {
+                **v,
+                "acc": round(v["correct"] / v["total"], 4) if v["total"] else None,
+            }
+            for k, v in per_direction_agg.items()
+        },
         "per_drift": {
             k: {
                 **v,
@@ -178,9 +201,16 @@ def main() -> int:
         results.append(r)
         dsa = r["drift_sensitive_acc"]
         dsa_str = f"{dsa:.2%}" if dsa is not None else "n/a"
+        pd = r.get("per_direction", {})
+        def _fmt(dir_):
+            s = pd.get(dir_, {})
+            t = s.get("total", 0); c = s.get("correct", 0)
+            return f"{dir_[:4]}={c}/{t}"
+        per_dir_str = "  ".join(_fmt(d) for d in ("tightening", "loosening", "neutral"))
         print(f"  seed={seed} reward={r['total_reward']:.2f}/30 "
               f"drift_acc={dsa_str} "
-              f"({r['drift_sensitive_correct']}/{r['drift_sensitive_total']})")
+              f"({r['drift_sensitive_correct']}/{r['drift_sensitive_total']})  "
+              f"[{per_dir_str}]")
 
     dt = time.time() - t0
     summary = summarise(results)
