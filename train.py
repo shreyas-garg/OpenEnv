@@ -178,6 +178,9 @@ def run_sft(model, tokenizer, train_ds):
         report_to="wandb" if USE_WANDB else "none",
         seed=SEED,
         max_length=MAX_SEQ_LEN,
+        # Cap tokenization parallelism — Unsloth defaults to num_proc=cpu_count()
+        # which spawns 64+ workers on cloud GPUs and OOMs the container.
+        dataset_num_proc=4,
     )
     trainer = SFTTrainer(
         model=model,
@@ -217,6 +220,8 @@ def run_grpo(model, tokenizer, train_ds, eval_ds):
         # Keep rollouts fast for Colab:
         temperature=0.7,
         top_p=0.9,
+        # Cap tokenization parallelism (same OOM defense as SFT).
+        dataset_num_proc=4,
     )
     print(f"\n=== GRPO: {len(train_ds)} prompts, max_steps={GRPO_MAX_STEPS}, K={GRPO_NUM_GEN} ===")
     trainer = GRPOTrainer(
