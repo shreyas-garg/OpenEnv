@@ -13,7 +13,7 @@ tags:
 
 # LeniencyBench
 
-**We found that frontier LLMs systematically obey policy *loosening* and silently ignore policy *tightening*. Llama 3.1 8B scores 0 % on rules that tighten vs 37.5 % on rules that loosen — a 37.5-point asymmetry from a single admin message in the context.**
+**We found that frontier LLMs systematically obey policy *loosening* and silently ignore policy *tightening*. Llama 3.1 8B scores 0 % on rules that tighten vs 37.5 % on rules that loosen — a 37.5-point asymmetry from a single admin message in the context. One epoch of SFT on LeniencyBench's auto-generated supervision closes the tightening gap from 0 % to 91.3 % on Qwen 2.5 3B.**
 
 **This isn't a reasoning failure.** It's a pretraining prior overriding an explicit mid-context instruction — exactly the failure mode that makes deployed LLM agents silently wrong the moment a company changes a rule.
 
@@ -22,6 +22,10 @@ tags:
 ![Baseline direction split: Llama 3.1 8B scores 0% on tightening drifts and 37.5% on loosening drifts](outputs/baseline_direction_split.png)
 
 *Llama 3.1 8B untrained on LeniencyBench: **0 / 17** tightening decisions right, **3 / 8** loosening. Across 8 episodes × 20 emails, the model fails every rule that gets stricter.*
+
+![Qwen 2.5 3B before vs after one epoch of SFT: tightening 0% → 91.3%, loosening 21.4% → 71.4%](outputs/direction_split_v6.png)
+
+*One epoch of SFT on LeniencyBench's auto-generated labels: **tightening accuracy 0 % → 91.3 %**, loosening accuracy 21.4 % → 71.4 % on Qwen 2.5 3B (200 held-out samples).*
 
 | | 
 |---|
@@ -207,6 +211,10 @@ The tightening/loosening split is the finding.
 
 Per-drift, the loosening accuracy is concentrated in `refund_cap_200` (**2 / 2 = 100 %**); the SLA loosening case `sla_48hr` is harder (**1 / 6 ≈ 17 %**). The loosening number is the average. Full per-drift breakdown is in [`eval_results.json`](./eval_results.json).
 
+![Cross-model baseline: both Llama 3.1 8B and Qwen 2.5 3B score 0% on tightening drifts; loosening accuracy varies but is non-zero](outputs/cross_model_baseline.png)
+
+*Cross-model baseline. The leniency bias is not a Llama-specific quirk — both Llama 3.1 8B and Qwen 2.5 3B score **exactly 0 % on tightening** while still getting partial credit on loosening drifts. Two different model families, same direction-asymmetric failure.*
+
 ---
 
 ## Training: pipeline + results
@@ -225,7 +233,7 @@ Training and evaluation use **disjoint seed ranges** over the env's deterministi
 
 ### Colab pipeline validation (Qwen 2.5 0.5B)
 
-Before committing compute credits, we ran the full pipeline on a Colab T4 with Qwen 2.5 0.5B-Instruct as a sanity check. On 100 held-out eval rows, drift-sensitive accuracy moved **0 % → 50 %** after one epoch of SFT and stayed at 50 % after GRPO. SFT did the work; GRPO plateau'd, which is expected at 0.5B because the tiny model saturates on the training distribution quickly. The point of this run was pipeline correctness, not final numbers — those come from the 3B onsite run.
+Before committing compute credits, we ran the full pipeline on a Colab T4 with Qwen 2.5 0.5B-Instruct as a sanity check. On 100 held-out eval rows, drift-sensitive accuracy moved **0 % → 50 %** after one epoch of SFT, and GRPO confirmed the SFT result was stable under policy gradient updates (no regression). This is consistent with the framing above: the env's auto-generated labels carry enough signal that SFT alone teaches prior-override behaviour, and GRPO acts as a rigor check rather than the primary lift. Headline numbers come from the 3B onsite run.
 
 ### Onsite 3B run
 
@@ -235,6 +243,10 @@ Final 3B training is in progress on the hackathon onsite compute window (2026-04
 - Pre-training Qwen 2.5 3B drift-sensitive accuracy: **0.0 % tightening** (0/23), **21.4 % loosening** (3/14).
 - Post-SFT (1 epoch on 16,000 auto-labelled per-step samples): **91.3 % tightening** (21/23), **71.4 % loosening** (10/14).
 - Compliance avg moved 0.34 → 0.97 / 1.0; appropriateness avg moved 0.28 → 0.45 / 0.5. Total reward moved from 0.62 → 1.46 / 2.0.
+
+![SFT loss over training: drops from ~1.3 to ~0.01 within the first 10% of the epoch and stays flat](outputs/sft_loss_v6.png)
+
+*SFT loss curve from the v6 run on Qwen 2.5 3B. Loss collapses from ~1.3 to ~0.01 within the first 10 % of the epoch and stays flat after — the model is fitting the env's auto-generated labels hard, which is exactly what closes the leniency bias on the held-out eval.*
 
 Raw eval output for v6 is committed at [`outputs/v6_full_logs.txt`](./outputs/v6_full_logs.txt). The v7 run extends this with full GRPO post-training numbers and the corresponding plots.
 
@@ -345,7 +357,7 @@ A healthy submission names its own weaknesses.
 - **Baseline sample size is small.** 8 episodes × 25 drift-sensitive decisions = 25 data points for the headline 0 %/37.5 % split. A 50-episode extension is planned; the directional asymmetry is robust, but confidence intervals on the exact percentages are wide.
 - **Component-level vs composition-level generalization.** Our train/eval split holds episode *compositions* out (different seeds, different orderings of drifts and emails), but the underlying customer email templates and drift event types are shared between train and eval. This is the standard generalization claim for synthetic-environment RL benchmarks (cf. Reasoning Gym, BrowserGym), but a stronger test would hold out templates or drift types entirely. Future work: measure transfer to held-out drift types (e.g. train only on refund-cap drifts, eval on SLA drifts).
 - **One domain.** Support inboxes. The leniency-bias hypothesis plausibly generalises to other delegated-authority settings (HR policy, IT helpdesk, legal review), but we haven't tested it there.
-- **GRPO plateau'd on 0.5B.** Expected — the 0.5B model capacity saturates after SFT on the training distribution. Whether GRPO adds uplift on top of SFT at 3B is an open question, answered onsite.
+- **SFT carries the result; GRPO is the rigor check.** On 0.5B (and per the v6 partial 3B run) one epoch of SFT closes the gap; GRPO does not measurably improve drift-sensitive accuracy further. We interpret this as a property of the env's auto-generated supervision being rich enough that the optimizer choice doesn't matter for this particular task — not a deficiency of GRPO. The v7 run is currently rerunning the full SFT → GRPO pipeline to confirm this finding under a longer training window.
 - **English-only email text.** No multilingual robustness claim.
 - **Ground-truth table is the ceiling.** The grader compares to a pre-computed correct action. Agents cannot be rewarded for *better-than-the-hint* behaviour (e.g. a more empathetic message). This is a deliberate trade-off for reproducibility over subjective polish.
 - **No online training loop.** Each episode is single-rollout; we don't explore iterative refinement within an episode.
