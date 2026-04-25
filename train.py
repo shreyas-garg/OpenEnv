@@ -386,6 +386,28 @@ def main() -> int:
     model.save_pretrained(adapter_path)
     tokenizer.save_pretrained(adapter_path)
     print(f"\nLoRA adapters saved to {adapter_path}")
+
+    # Push the entire outputs/ directory to HF Hub so it survives the
+    # ephemeral Jobs container. Set HUB_REPO_ID to enable.
+    hub_repo = os.getenv("HUB_REPO_ID")
+    if hub_repo:
+        try:
+            from huggingface_hub import HfApi, create_repo
+            create_repo(hub_repo, repo_type="model", exist_ok=True, private=True,
+                        token=os.getenv("HF_TOKEN"))
+            HfApi().upload_folder(
+                folder_path=OUTPUT_DIR,
+                repo_id=hub_repo,
+                repo_type="model",
+                token=os.getenv("HF_TOKEN"),
+                commit_message="Onsite training outputs",
+            )
+            print(f"\nOutputs pushed to https://huggingface.co/{hub_repo}")
+        except Exception as e:
+            print(f"\n[warn] failed to push outputs to Hub: {e}")
+    else:
+        print("\n[note] HUB_REPO_ID not set; outputs only exist inside this container.")
+
     return 0
 
 
