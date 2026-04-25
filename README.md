@@ -28,7 +28,6 @@ tags:
 | 🤗 **Live env:** [huggingface.co/spaces/shreyas-garg/drift-env](https://huggingface.co/spaces/shreyas-garg/drift-env) |
 | 💻 **Code:** [github.com/shreyas-garg/OpenEnv](https://github.com/shreyas-garg/OpenEnv) |
 | 📓 **Training notebook:** [`train_colab.ipynb`](./train_colab.ipynb) |
-| 🎥 **Walkthrough video (≤2 min):** _linked here after onsite Day 2_ |
 
 ---
 
@@ -55,6 +54,8 @@ We call the target capability **prior-override instruction following**: reading 
 LeniencyBench makes the **policy itself** the thing that changes, and scores the agent's response programmatically. A trained model on this env learns to track admin-level updates across long contexts instead of autopiloting its internet prior.
 
 **"Isn't this just email triage?"** No. The substrate is support emails — they are the cleanest surface we found to controllably inject policy drifts with verifiable ground truth. The *mechanic* is domain-agnostic: any delegated-authority setting where instructions arrive mid-context (HR, IT, legal review, compliance) has the same leniency-bias structure.
+
+**Themes addressed.** LeniencyBench fits **Theme 3.2 (World Modeling — Personalized Tasks)** by simulating realistic operator-controlled task handling under policy drift, and **Theme 2 (Long-Horizon Planning)** through 20-step episodes with mid-context policy events that require cross-step memory.
 
 ---
 
@@ -103,6 +104,48 @@ Grader-relevant metadata (`refund_amount`, `severity`, etc.) is stripped before 
 | | `sla_48hr` | loosening | 24h → 48h |
 
 Each episode samples two drifts from different types, so they stack. **"Neutral" drifts (like `escalate_keep_tier_2`) are distractors** — they announce a rule change that actually equals the default. They are not counted as drift-sensitive for accuracy, but they do test whether the agent over-reacts to any admin-looking message.
+
+---
+
+## Architecture at a glance
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  Episode generator (deterministic from seed)                     │
+│  → 20 emails per episode: 18 customer + 2 admin (drift events)   │
+└────────────────────────────────┬─────────────────────────────────┘
+                                 │
+                                 ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  DriftEnv — OpenEnv interface (reset / step / state)             │
+│  Observation: current email + inbox history (no leaked metadata) │
+│  Action: 1 of 6 discrete types + typed parameters                │
+└──────────────┬────────────────────────────────────┬──────────────┘
+               │                                    │
+               ▼                                    ▼
+┌──────────────────────────┐      ┌──────────────────────────────┐
+│  LLM Agent (Qwen 2.5 3B) │      │  Grader (deterministic)      │
+│  + LoRA adapter (rank 16)│ ──►  │  • compliance       [0, 1.0] │
+│  emits JSON action       │      │  • appropriateness  [0, 0.5] │
+│                          │      │  • drift_bonus      [0, 0.5] │
+└──────────┬───────────────┘      └──────────────┬───────────────┘
+           │                                     │
+           └──────────────┬──────────────────────┘
+                          │ per-step reward ∈ [0, 2]
+                          ▼
+            ┌─────────────────────────────────┐
+            │  Training pipeline              │
+            │  SFT (1 epoch) → GRPO (600 steps)│
+            │  Unsloth + HF TRL, LoRA-only    │
+            └────────────────┬────────────────┘
+                             │
+                             ▼
+            ┌─────────────────────────────────┐
+            │  Held-out eval (seeds 10000+)   │
+            │  Direction-split accuracy:      │
+            │  tightening vs loosening        │
+            └─────────────────────────────────┘
+```
 
 ---
 
@@ -184,21 +227,16 @@ Training and evaluation use **disjoint seed ranges** over the env's deterministi
 
 Before committing compute credits, we ran the full pipeline on a Colab T4 with Qwen 2.5 0.5B-Instruct as a sanity check. On 100 held-out eval rows, drift-sensitive accuracy moved **0 % → 50 %** after one epoch of SFT and stayed at 50 % after GRPO. SFT did the work; GRPO plateau'd, which is expected at 0.5B because the tiny model saturates on the training distribution quickly. The point of this run was pipeline correctness, not final numbers — those come from the 3B onsite run.
 
-### Onsite 3B run — **TODO**
+### Onsite 3B run
 
-Generated during the onsite training window (2026-04-25 / 26). Plots will be embedded here:
+Final 3B training is in progress on the hackathon onsite compute window (2026-04-25 / 26). Plots and the full pre / post-SFT / post-GRPO comparison table are folded in on completion.
 
-_Placeholder — filled after onsite training completes:_
-- `outputs/sft_loss.png` — SFT loss curve
-- `outputs/reward_curve.png` — GRPO reward over training, 3 components logged separately
-- `outputs/drift_acc_bars.png` — pre / post-SFT / post-GRPO with **tightening and loosening split**
-- `outputs/summary.png` — all three combined for a one-look readable summary
+**Partial result already in evidence (v6 run, post-SFT, 200 held-out samples):**
+- Pre-training Qwen 2.5 3B drift-sensitive accuracy: **0.0 % tightening** (0/23), **21.4 % loosening** (3/14).
+- Post-SFT (1 epoch on 16,000 auto-labelled per-step samples): **91.3 % tightening** (21/23), **71.4 % loosening** (10/14).
+- Compliance avg moved 0.34 → 0.97 / 1.0; appropriateness avg moved 0.28 → 0.45 / 0.5. Total reward moved from 0.62 → 1.46 / 2.0.
 
-| Stage | drift-sens acc | tightening | loosening |
-|---|---|---|---|
-| pre-training (Qwen 2.5 3B) | **TBD** | **TBD** | **TBD** |
-| post-SFT | **TBD** | **TBD** | **TBD** |
-| post-GRPO | **TBD** | **TBD** | **TBD** |
+Raw eval output for v6 is committed at [`outputs/v6_full_logs.txt`](./outputs/v6_full_logs.txt). The v7 run extends this with full GRPO post-training numbers and the corresponding plots.
 
 ---
 
@@ -328,10 +366,17 @@ If the env finds traction beyond the hackathon, the natural follow-ups are:
 
 ## Related work / context
 
-- **[Patronus AI](https://www.patronus.ai/)** research on consumer-workflow schema drift motivated the framing of LeniencyBench; their finding that deployed agents silently fail when policies drift aligns with the leniency-bias asymmetry we measure.
-- **[Scale AI's](https://scale.com/)** long-horizon business-workflow benchmarks share the stateful-inbox shape; a 20-email episode with stacked drifts is a tractable proxy for multi-hour HR/IT workflow simulations.
-- **[OpenEnv](https://github.com/meta-pytorch/OpenEnv)** (Meta × Hugging Face) provides the standardised interface — `reset/step/state` + typed observation/action — that this benchmark targets.
-- **Unsloth** + **HF TRL** provide the training stack, following the RLVR (reinforcement learning with verifiable rewards) pattern emphasised in the hackathon guidance.
+**Knowledge conflict / parametric-vs-context.** A growing literature studies what happens when an LLM's pretrained knowledge contradicts evidence presented in its context. Longpre et al. (2021, *"Entity-Based Knowledge Conflicts in Question Answering"*) and follow-ups document that models default to parametric memory even when context provides a clearly authoritative correction. The leniency-bias asymmetry we report is a directional special case of this: models concede when the contextual rule is *looser* than their prior, but resist when it is *stricter*.
+
+**Lost in the middle.** Liu et al. (2023, [*"Lost in the Middle: How Language Models Use Long Contexts"*](https://arxiv.org/abs/2307.03172)) showed that LLMs systematically under-attend to information placed in the middle of long contexts. Our admin emails are placed at fixed positions (3 and 11 of 20), and the corresponding drift-sensitive customer emails fall later in the sequence — putting our task squarely in the middle-of-context regime that paper warns about. Training on LeniencyBench is, in part, training the attention pattern out.
+
+**RLHF-induced bias toward leniency.** Perez et al. (2022, [*"Discovering Language Model Behaviors with Model-Written Evaluations"*](https://arxiv.org/abs/2212.09251)) document a family of RLHF-induced biases including sycophancy and refusal-aversion. The pattern that "approve the refund / accommodate the user" is rewarded during instruction-tuning is a direct descendant of those findings. LeniencyBench provides one concrete, programmatically-verifiable target for measuring and removing one such bias.
+
+**Instruction following benchmarks.** Zhou et al. (2023, [IFEval](https://arxiv.org/abs/2311.07911)) and follow-ups measure verifiable instruction adherence on single-turn prompts. LeniencyBench extends that idea to *cross-turn* instruction following — whether a mid-context instruction propagates into action-level decisions on later turns.
+
+**RLVR + OpenEnv.** [OpenEnv](https://github.com/meta-pytorch/OpenEnv) (Meta × Hugging Face) provides the standardised `reset/step/state` interface this benchmark targets. The training stack is **Unsloth + HF TRL**, in the RLVR (reinforcement learning with verifiable rewards) pattern: reward computed by deterministic Python rather than a learned reward model.
+
+**Industry context.** [Patronus AI](https://www.patronus.ai/) (consumer-workflow schema drift) and [Scale AI](https://scale.com/) (long-horizon business-workflow benchmarks) study problems whose stateful-inbox shape parallels LeniencyBench's substrate.
 
 ---
 
