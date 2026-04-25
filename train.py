@@ -86,6 +86,29 @@ def seed_all(s: int) -> None:
         torch.cuda.manual_seed_all(s)
 
 
+def _push_outputs_to_hub(label: str = "training outputs") -> None:
+    """Push the entire OUTPUT_DIR to HF Hub. Safe to call multiple times.
+    Survives ephemeral HF Jobs containers — without this, work is lost when
+    the container terminates."""
+    hub_repo = os.getenv("HUB_REPO_ID")
+    if not hub_repo:
+        return
+    try:
+        from huggingface_hub import HfApi, create_repo
+        create_repo(hub_repo, repo_type="model", exist_ok=True, private=True,
+                    token=os.getenv("HF_TOKEN"))
+        HfApi().upload_folder(
+            folder_path=OUTPUT_DIR,
+            repo_id=hub_repo,
+            repo_type="model",
+            token=os.getenv("HF_TOKEN"),
+            commit_message=label,
+        )
+        print(f"[hub] {label} pushed -> https://huggingface.co/{hub_repo}")
+    except Exception as e:
+        print(f"[hub] WARN: failed to push '{label}': {e}")
+
+
 def _precision_flags() -> tuple[bool, bool]:
     """Return (use_bf16, use_fp16). T4 (Turing, CC 7.5) doesn't support bf16 —
     only Ampere (CC 8.0) and later do. Fall back to fp16 on T4."""
@@ -195,6 +218,17 @@ def run_sft(model, tokenizer, train_ds):
     with open(f"{OUTPUT_DIR}/sft_log.json", "w") as f:
         _json.dump(trainer.state.log_history, f, indent=2)
     print(f"SFT log saved -> {OUTPUT_DIR}/sft_log.json")
+
+    # CRITICAL: save adapter immediately after SFT in case GRPO fails later.
+    # Without this, an error during GRPO loses the entire SFT adapter.
+    sft_adapter_path = f"{OUTPUT_DIR}/lora_adapters_sft"
+    trainer.model.save_pretrained(sft_adapter_path)
+    tokenizer.save_pretrained(sft_adapter_path)
+    print(f"SFT-only adapter checkpoint saved -> {sft_adapter_path}")
+
+    # Push outputs to Hub now too, so the SFT artifact survives any later crash.
+    _push_outputs_to_hub("post-SFT checkpoint")
+
     return trainer.model
 
 
@@ -220,8 +254,6 @@ def run_grpo(model, tokenizer, train_ds, eval_ds):
         # Keep rollouts fast for Colab:
         temperature=0.7,
         top_p=0.9,
-        # Cap tokenization parallelism (same OOM defense as SFT).
-        dataset_num_proc=4,
     )
     print(f"\n=== GRPO: {len(train_ds)} prompts, max_steps={GRPO_MAX_STEPS}, K={GRPO_NUM_GEN} ===")
     trainer = GRPOTrainer(
@@ -362,9 +394,14 @@ def main() -> int:
     model = run_sft(model, tokenizer, sft_train)
     post_sft = offline_eval(model, tokenizer, grpo_eval, label="post-SFT")
 
-    # GRPO.
-    model = run_grpo(model, tokenizer, grpo_train, grpo_eval)
-    post_grpo = offline_eval(model, tokenizer, grpo_eval, label="post-GRPO")
+    # GRPO. If this fails we still want the SFT outputs pushed.
+    try:
+        model = run_grpo(model, tokenizer, grpo_train, grpo_eval)
+        post_grpo = offline_eval(model, tokenizer, grpo_eval, label="post-GRPO")
+    except Exception as exc:
+        print(f"\n[grpo] FAILED: {type(exc).__name__}: {exc}")
+        print("[grpo] Continuing with post-SFT model as the final artifact.")
+        post_grpo = post_sft  # fall back so the summary still prints sensibly
 
     print("\n=== Improvement summary ===")
     for k in ("compliance", "appropriateness", "drift_bonus"):
@@ -392,25 +429,9 @@ def main() -> int:
     tokenizer.save_pretrained(adapter_path)
     print(f"\nLoRA adapters saved to {adapter_path}")
 
-    # Push the entire outputs/ directory to HF Hub so it survives the
-    # ephemeral Jobs container. Set HUB_REPO_ID to enable.
-    hub_repo = os.getenv("HUB_REPO_ID")
-    if hub_repo:
-        try:
-            from huggingface_hub import HfApi, create_repo
-            create_repo(hub_repo, repo_type="model", exist_ok=True, private=True,
-                        token=os.getenv("HF_TOKEN"))
-            HfApi().upload_folder(
-                folder_path=OUTPUT_DIR,
-                repo_id=hub_repo,
-                repo_type="model",
-                token=os.getenv("HF_TOKEN"),
-                commit_message="Onsite training outputs",
-            )
-            print(f"\nOutputs pushed to https://huggingface.co/{hub_repo}")
-        except Exception as e:
-            print(f"\n[warn] failed to push outputs to Hub: {e}")
-    else:
+    # Final push of all outputs (SFT + GRPO + plots + adapter).
+    _push_outputs_to_hub("post-GRPO final")
+    if not os.getenv("HUB_REPO_ID"):
         print("\n[note] HUB_REPO_ID not set; outputs only exist inside this container.")
 
     return 0
