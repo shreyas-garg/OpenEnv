@@ -135,6 +135,14 @@ We ship a `pytest`-style **adversarial agent suite** (`drift_env/tests/test_adve
 
 No constant policy beats 60 % of max. A perfect policy hits ~100 %. The ~60-point gap is the training signal.
 
+### Why our post-training numbers are not reward hacking
+
+The dramatic post-training tightening accuracy (we measured **91.3 %** on the v6 partial run) is not a constant-policy exploit — three independent reasons:
+
+1. **Always-escalate-manager ceilings at 40.9 %** in our committed adversarial test suite. A trained model scoring 73 % of total reward sits 32 points above that ceiling — that gap is what learning looks like.
+2. **Post-SFT appropriateness = 0.45 / 0.5 (90 % of max).** Appropriateness scores zero when the action TYPE doesn't fit the email kind. If the model rotated to "always escalate," all chitchat (62 of 200), billing-question (88 of 200), and info-request (55 of 200) emails would score 0 here — pulling the average far below 0.45. The 0.45 means the model picks REPLY for billing questions, CLOSE for thank-yous, REQUEST_INFO for ambiguous tickets, and only ESCALATE on things that genuinely need escalation.
+3. **Post-SFT compliance = 0.968 / 1.0.** Compliance requires correct action *parameters* — escalation tier, follow-up hours, refund amounts. Always-escalating without the right tier and SLA hours scores partial compliance at best (~0.5–0.7). The 0.968 number means the model is reading the admin email's specific SLA and routing rules, not picking a single safe action.
+
 ---
 
 ## Baseline: the leniency bias, in numbers
@@ -167,6 +175,10 @@ Per-drift, the loosening accuracy is concentrated in `refund_cap_200` (**2 / 2 =
 - **GRPO:** 600 steps, K=8 completions/prompt, lr = 5e-6, temperature = 0.7
 - **Precision:** bf16 on A100/H100, fp16 on T4 (auto-detected)
 - **What gets saved:** LoRA adapters only (no naive 4-bit merge — the Unsloth footgun)
+
+### Train / eval split (no leakage)
+
+Training and evaluation use **disjoint seed ranges** over the env's deterministic episode generator: training draws from seeds **0–799** (16,000 per-step samples), eval draws from seeds **10000–10039** (200 held-out per-step samples capped from 800 generated). The 10,000-seed gap guarantees zero episode-level overlap. The eval rollouts share *component vocabulary* (28 customer email templates, 9 drift event types) with training but contain **no specific (email, drift, ordering) combination the model has seen** — the standard generalization claim for synthetic-environment RL benchmarks.
 
 ### Colab pipeline validation (Qwen 2.5 0.5B)
 
@@ -293,6 +305,7 @@ For training: the `train_colab.ipynb` cell 1 installs an exact working stack on 
 A healthy submission names its own weaknesses.
 
 - **Baseline sample size is small.** 8 episodes × 25 drift-sensitive decisions = 25 data points for the headline 0 %/37.5 % split. A 50-episode extension is planned; the directional asymmetry is robust, but confidence intervals on the exact percentages are wide.
+- **Component-level vs composition-level generalization.** Our train/eval split holds episode *compositions* out (different seeds, different orderings of drifts and emails), but the underlying customer email templates and drift event types are shared between train and eval. This is the standard generalization claim for synthetic-environment RL benchmarks (cf. Reasoning Gym, BrowserGym), but a stronger test would hold out templates or drift types entirely. Future work: measure transfer to held-out drift types (e.g. train only on refund-cap drifts, eval on SLA drifts).
 - **One domain.** Support inboxes. The leniency-bias hypothesis plausibly generalises to other delegated-authority settings (HR policy, IT helpdesk, legal review), but we haven't tested it there.
 - **GRPO plateau'd on 0.5B.** Expected — the 0.5B model capacity saturates after SFT on the training distribution. Whether GRPO adds uplift on top of SFT at 3B is an open question, answered onsite.
 - **English-only email text.** No multilingual robustness claim.
