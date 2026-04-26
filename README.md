@@ -34,7 +34,7 @@ tags:
 | 🤗 **Code (HF mirror):** [huggingface.co/shreyas-garg/leniencybench](https://huggingface.co/shreyas-garg/leniencybench) |
 | 🧠 **Trained adapter:** [huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs](https://huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs) |
 | 📓 **Training notebook:** [`train_colab.ipynb`](./train_colab.ipynb) |
-| 🎥 **Walkthrough video (≤2 min):** _paste YouTube URL here after recording_ |
+| 📝 **Mini-blog (≤2 min read):** [`blog.md`](./blog.md) |
 
 ---
 
