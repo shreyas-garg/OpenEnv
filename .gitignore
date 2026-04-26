@@ -23,3 +23,7 @@ Thumbs.db
 # Private hackathon prep (not for public repo)
 pitch/
 ONSITE_RUNBOOK.md
+
+# Local downloads of HF Hub artifacts (the trained adapter is already
+# hosted at huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs).
+outputs/v7/
