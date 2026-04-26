@@ -30,8 +30,11 @@ tags:
 | | 
 |---|
 | 🤗 **Live env:** [huggingface.co/spaces/shreyas-garg/drift-env](https://huggingface.co/spaces/shreyas-garg/drift-env) |
-| 💻 **Code:** [github.com/shreyas-garg/OpenEnv](https://github.com/shreyas-garg/OpenEnv) |
+| 💻 **Code (GitHub):** [github.com/shreyas-garg/OpenEnv](https://github.com/shreyas-garg/OpenEnv) |
+| 🤗 **Code (HF mirror):** [huggingface.co/shreyas-garg/leniencybench](https://huggingface.co/shreyas-garg/leniencybench) |
+| 🧠 **Trained adapter:** [huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs](https://huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs) |
 | 📓 **Training notebook:** [`train_colab.ipynb`](./train_colab.ipynb) |
+| 🎥 **Walkthrough video (≤2 min):** _paste YouTube URL here after recording_ |
 
 ---
 
