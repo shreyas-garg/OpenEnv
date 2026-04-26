@@ -95,7 +95,7 @@ def _push_outputs_to_hub(label: str = "training outputs") -> None:
         return
     try:
         from huggingface_hub import HfApi, create_repo
-        create_repo(hub_repo, repo_type="model", exist_ok=True, private=True,
+        create_repo(hub_repo, repo_type="model", exist_ok=True, private=False,
                     token=os.getenv("HF_TOKEN"))
         HfApi().upload_folder(
             folder_path=OUTPUT_DIR,
