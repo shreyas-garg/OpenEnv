@@ -1,0 +1,79 @@
+{
+  "pre": {
+    "compliance": 0.5275000000000006,
+    "appropriateness": 0.41,
+    "drift_bonus": 0.005,
+    "drift_acc": 0.11764705882352941,
+    "drift_acc_by_direction": {
+      "tightening": 0.0,
+      "loosening": 0.21428571428571427,
+      "neutral": null
+    },
+    "drift_counts_by_direction": {
+      "tightening": {
+        "correct": 0,
+        "total": 23
+      },
+      "loosening": {
+        "correct": 3,
+        "total": 14
+      },
+      "neutral": {
+        "correct": 0,
+        "total": 0
+      }
+    }
+  },
+  "post_sft": {
+    "compliance": 0.9679999999999999,
+    "appropriateness": 0.45,
+    "drift_bonus": 0.0375,
+    "drift_acc": 0.8823529411764706,
+    "drift_acc_by_direction": {
+      "tightening": 0.9130434782608695,
+      "loosening": 0.7142857142857143,
+      "neutral": null
+    },
+    "drift_counts_by_direction": {
+      "tightening": {
+        "correct": 21,
+        "total": 23
+      },
+      "loosening": {
+        "correct": 10,
+        "total": 14
+      },
+      "neutral": {
+        "correct": 0,
+        "total": 0
+      }
+    }
+  },
+  "post_grpo": {
+    "compliance": 0.9679999999999999,
+    "appropriateness": 0.45,
+    "drift_bonus": 0.0375,
+    "drift_acc": 0.8823529411764706,
+    "drift_acc_by_direction": {
+      "tightening": 0.9130434782608695,
+      "loosening": 0.7142857142857143,
+      "neutral": null
+    },
+    "drift_counts_by_direction": {
+      "tightening": {
+        "correct": 21,
+        "total": 23
+      },
+      "loosening": {
+        "correct": 10,
+        "total": 14
+      },
+      "neutral": {
+        "correct": 0,
+        "total": 0
+      }
+    }
+  },
+  "model_name": "unsloth/Qwen2.5-3B-Instruct",
+  "quick_mode": false
+}

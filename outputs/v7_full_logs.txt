@@ -1,0 +1,449 @@
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package less.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 15021 files and directories currently installed.)
+Preparing to unpack .../00-less_590-1ubuntu0.22.04.3_amd64.deb ...
+Unpacking less (590-1ubuntu0.22.04.3) ...
+Selecting previously unselected package libmd0:amd64.
+Preparing to unpack .../01-libmd0_1.0.4-1build1_amd64.deb ...
+Unpacking libmd0:amd64 (1.0.4-1build1) ...
+Selecting previously unselected package libbsd0:amd64.
+Preparing to unpack .../02-libbsd0_0.11.5-1_amd64.deb ...
+Unpacking libbsd0:amd64 (0.11.5-1) ...
+Selecting previously unselected package libexpat1:amd64.
+Preparing to unpack .../03-libexpat1_2.4.7-1ubuntu0.7_amd64.deb ...
+Unpacking libexpat1:amd64 (2.4.7-1ubuntu0.7) ...
+Selecting previously unselected package libcbor0.8:amd64.
+Preparing to unpack .../04-libcbor0.8_0.8.0-2ubuntu1_amd64.deb ...
+Unpacking libcbor0.8:amd64 (0.8.0-2ubuntu1) ...
+Selecting previously unselected package libedit2:amd64.
+Preparing to unpack .../05-libedit2_3.1-20210910-1build1_amd64.deb ...
+Unpacking libedit2:amd64 (3.1-20210910-1build1) ...
+Selecting previously unselected package libfido2-1:amd64.
+Preparing to unpack .../06-libfido2-1_1.10.0-1_amd64.deb ...
+Unpacking libfido2-1:amd64 (1.10.0-1) ...
+Selecting previously unselected package libnghttp2-14:amd64.
+Preparing to unpack .../07-libnghttp2-14_1.43.0-1ubuntu0.2_amd64.deb ...
+Unpacking libnghttp2-14:amd64 (1.43.0-1ubuntu0.2) ...
+Selecting previously unselected package libpsl5:amd64.
+Preparing to unpack .../08-libpsl5_0.21.0-1.2build2_amd64.deb ...
+Unpacking libpsl5:amd64 (0.21.0-1.2build2) ...
+Selecting previously unselected package libxau6:amd64.
+Preparing to unpack .../09-libxau6_1%3a1.0.9-1build5_amd64.deb ...
+Unpacking libxau6:amd64 (1:1.0.9-1build5) ...
+Selecting previously unselected package libxdmcp6:amd64.
+Preparing to unpack .../10-libxdmcp6_1%3a1.1.3-0ubuntu5_amd64.deb ...
+Unpacking libxdmcp6:amd64 (1:1.1.3-0ubuntu5) ...
+Selecting previously unselected package libxcb1:amd64.
+Preparing to unpack .../11-libxcb1_1.14-3ubuntu3_amd64.deb ...
+Unpacking libxcb1:amd64 (1.14-3ubuntu3) ...
+Selecting previously unselected package libx11-data.
+Preparing to unpack .../12-libx11-data_2%3a1.7.5-1ubuntu0.3_all.deb ...
+Unpacking libx11-data (2:1.7.5-1ubuntu0.3) ...
+Selecting previously unselected package libx11-6:amd64.
+Preparing to unpack .../13-libx11-6_2%3a1.7.5-1ubuntu0.3_amd64.deb ...
+Unpacking libx11-6:amd64 (2:1.7.5-1ubuntu0.3) ...
+Selecting previously unselected package libxext6:amd64.
+Preparing to unpack .../14-libxext6_2%3a1.3.4-1build1_amd64.deb ...
+Unpacking libxext6:amd64 (2:1.3.4-1build1) ...
+Selecting previously unselected package libxmuu1:amd64.
+Preparing to unpack .../15-libxmuu1_2%3a1.1.3-3_amd64.deb ...
+Unpacking libxmuu1:amd64 (2:1.1.3-3) ...
+Selecting previously unselected package openssh-client.
+Preparing to unpack .../16-openssh-client_1%3a8.9p1-3ubuntu0.14_amd64.deb ...
+Unpacking openssh-client (1:8.9p1-3ubuntu0.14) ...
+Selecting previously unselected package publicsuffix.
+Preparing to unpack .../17-publicsuffix_20211207.1025-1_all.deb ...
+Unpacking publicsuffix (20211207.1025-1) ...
+Selecting previously unselected package xauth.
+Preparing to unpack .../18-xauth_1%3a1.1-1build2_amd64.deb ...
+Unpacking xauth (1:1.1-1build2) ...
+Selecting previously unselected package libbrotli1:amd64.
+Preparing to unpack .../19-libbrotli1_1.0.9-2build6_amd64.deb ...
+Unpacking libbrotli1:amd64 (1.0.9-2build6) ...
+Selecting previously unselected package librtmp1:amd64.
+Preparing to unpack .../20-librtmp1_2.4+20151223.gitfa8646d.1-2build4_amd64.deb ...
+Unpacking librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build4) ...
+Selecting previously unselected package libssh-4:amd64.
+Preparing to unpack .../21-libssh-4_0.9.6-2ubuntu0.22.04.7_amd64.deb ...
+Unpacking libssh-4:amd64 (0.9.6-2ubuntu0.22.04.7) ...
+Selecting previously unselected package libcurl3-gnutls:amd64.
+Preparing to unpack .../22-libcurl3-gnutls_7.81.0-1ubuntu1.23_amd64.deb ...
+Unpacking libcurl3-gnutls:amd64 (7.81.0-1ubuntu1.23) ...
+Selecting previously unselected package liberror-perl.
+Preparing to unpack .../23-liberror-perl_0.17029-1_all.deb ...
+Unpacking liberror-perl (0.17029-1) ...
+Selecting previously unselected package git-man.
+Preparing to unpack .../24-git-man_1%3a2.34.1-1ubuntu1.17_all.deb ...
+Unpacking git-man (1:2.34.1-1ubuntu1.17) ...
+Selecting previously unselected package git.
+Preparing to unpack .../25-git_1%3a2.34.1-1ubuntu1.17_amd64.deb ...
+Unpacking git (1:2.34.1-1ubuntu1.17) ...
+Setting up libexpat1:amd64 (2.4.7-1ubuntu0.7) ...
+Setting up libxau6:amd64 (1:1.0.9-1build5) ...
+Setting up libpsl5:amd64 (0.21.0-1.2build2) ...
+Setting up libcbor0.8:amd64 (0.8.0-2ubuntu1) ...
+Setting up libbrotli1:amd64 (1.0.9-2build6) ...
+Setting up libnghttp2-14:amd64 (1.43.0-1ubuntu0.2) ...
+Setting up less (590-1ubuntu0.22.04.3) ...
+Setting up liberror-perl (0.17029-1) ...
+Setting up libx11-data (2:1.7.5-1ubuntu0.3) ...
+Setting up librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build4) ...
+Setting up libssh-4:amd64 (0.9.6-2ubuntu0.22.04.7) ...
+Setting up libmd0:amd64 (1.0.4-1build1) ...
+Setting up git-man (1:2.34.1-1ubuntu1.17) ...
+Setting up libfido2-1:amd64 (1.10.0-1) ...
+Setting up libbsd0:amd64 (0.11.5-1) ...
+Setting up publicsuffix (20211207.1025-1) ...
+Setting up libxdmcp6:amd64 (1:1.1.3-0ubuntu5) ...
+Setting up libxcb1:amd64 (1.14-3ubuntu3) ...
+Setting up libedit2:amd64 (3.1-20210910-1build1) ...
+Setting up libcurl3-gnutls:amd64 (7.81.0-1ubuntu1.23) ...
+Setting up git (1:2.34.1-1ubuntu1.17) ...
+Setting up libx11-6:amd64 (2:1.7.5-1ubuntu0.3) ...
+Setting up libxmuu1:amd64 (2:1.1.3-3) ...
+Setting up openssh-client (1:8.9p1-3ubuntu0.14) ...
+update-alternatives: using /usr/bin/ssh to provide /usr/bin/rsh (rsh) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/rsh.1.gz because associated file /usr/share/man/man1/ssh.1.gz (of link group rsh) doesn't exist
+update-alternatives: using /usr/bin/slogin to provide /usr/bin/rlogin (rlogin) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/rlogin.1.gz because associated file /usr/share/man/man1/slogin.1.gz (of link group rlogin) doesn't exist
+update-alternatives: using /usr/bin/scp to provide /usr/bin/rcp (rcp) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/rcp.1.gz because associated file /usr/share/man/man1/scp.1.gz (of link group rcp) doesn't exist
+Setting up libxext6:amd64 (2:1.3.4-1build1) ...
+Setting up xauth (1:1.1-1build2) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.8) ...
+Cloning into '/workspace/OpenEnv'...
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+QUICK_MODE=False  MODEL=unsloth/Qwen2.5-3B-Instruct
+GPU: NVIDIA A100-SXM4-80GB  capability=(8, 0)  bf16=True  fp16=False
+Train: {'n_rows': 16000, 'admin_rows': 1600, 'customer_rows': 14400, 'drift_sensitive_rows': 2240, 'bonus_eligible_rows': 1153, 'kinds_distribution': {'chitchat': 1467, 'refund': 6676, 'billing_q': 1439, 'admin': 1600, 'info_request': 1482, 'critical_incident': 3336}}
+Eval:  {'n_rows': 800, 'admin_rows': 80, 'customer_rows': 720, 'drift_sensitive_rows': 124, 'bonus_eligible_rows': 62, 'kinds_distribution': {'refund': 347, 'critical_incident': 168, 'admin': 80, 'billing_q': 88, 'chitchat': 62, 'info_request': 55}}
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+Unsloth: Your Flash Attention 2 installation seems to be broken. Using Xformers instead. No performance changes will be seen.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2026.4.8: Fast Qwen2 patching. Transformers: 5.5.0.
+   \\   /|    NVIDIA A100-SXM4-80GB. Num GPUs = 1. Max memory: 79.25 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.8.0+cu128. CUDA: 8.0. CUDA Toolkit: 12.8. Triton: 3.4.0
+\        /    Bfloat16 = TRUE. FA [Xformers = None. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+
+model.safetensors:   0%|          | 0.00/2.36G [00:00<?, ?B/s][A
+model.safetensors:   0%|          | 0.00/2.36G [00:01<?, ?B/s][A
+model.safetensors:  93%|█████████▎| 2.18G/2.36G [00:02<00:00, 1.82GB/s][Amodel.safetensors: 100%|██████████| 2.36G/2.36G [00:02<00:00, 884MB/s] 
+
+Loading weights:   0%|          | 0/434 [00:00<?, ?it/s][ALoading weights: 100%|██████████| 434/434 [00:00<00:00, 737.79it/s]
+
+generation_config.json:   0%|          | 0.00/271 [00:00<?, ?B/s][Ageneration_config.json: 100%|██████████| 271/271 [00:00<00:00, 1.79MB/s]
+
+tokenizer_config.json:   0%|          | 0.00/7.36k [00:00<?, ?B/s][Atokenizer_config.json: 100%|██████████| 7.36k/7.36k [00:00<00:00, 43.3MB/s]
+
+vocab.json:   0%|          | 0.00/2.78M [00:00<?, ?B/s][Avocab.json: 100%|██████████| 2.78M/2.78M [00:00<00:00, 60.7MB/s]
+
+merges.txt:   0%|          | 0.00/1.67M [00:00<?, ?B/s][Amerges.txt: 100%|██████████| 1.67M/1.67M [00:00<00:00, 58.4MB/s]
+
+tokenizer.json:   0%|          | 0.00/11.4M [00:00<?, ?B/s][Atokenizer.json: 100%|██████████| 11.4M/11.4M [00:00<00:00, 54.6MB/s]
+
+added_tokens.json:   0%|          | 0.00/605 [00:00<?, ?B/s][Aadded_tokens.json: 100%|██████████| 605/605 [00:00<00:00, 4.93MB/s]
+
+special_tokens_map.json:   0%|          | 0.00/614 [00:00<?, ?B/s][Aspecial_tokens_map.json: 100%|██████████| 614/614 [00:00<00:00, 4.80MB/s]
+unsloth/qwen2.5-3b-instruct-unsloth-bnb-4bit does not have a padding token! Will use pad_token = <|PAD_TOKEN|>.
+
+=== Offline eval [pre-training] over 200 samples ===
+  compliance avg     : 0.528 / 1.0
+  appropriateness avg: 0.410 / 0.5
+  drift_bonus avg    : 0.005 / 0.5
+  total avg          : 0.943 / 2.0
+  drift-sens acc     : 11.8%  (2/17)
+    tightening : 0.0%  (0/23)
+    loosening  : 21.4%  (3/14)
+    neutral    : n/a  (0/0)
+
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):   0%|          | 0/16000 [00:00<?, ? examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):   0%|          | 15/16000 [00:02<48:33,  5.49 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):   2%|▏         | 314/16000 [00:03<02:34, 101.30 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):   5%|▍         | 760/16000 [00:04<01:12, 209.32 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):   8%|▊         | 1327/16000 [00:05<00:45, 320.53 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  13%|█▎        | 2040/16000 [00:06<00:32, 431.06 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  19%|█▊        | 2968/16000 [00:07<00:22, 579.01 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  25%|██▌       | 4059/16000 [00:08<00:16, 729.89 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  32%|███▏      | 5135/16000 [00:10<00:13, 829.09 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  39%|███▉      | 6251/16000 [00:11<00:10, 913.86 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  46%|████▌     | 7300/16000 [00:12<00:09, 952.29 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  53%|█████▎    | 8469/16000 [00:13<00:07, 1009.64 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  60%|█████▉    | 9522/16000 [00:14<00:06, 1022.13 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  67%|██████▋   | 10671/16000 [00:15<00:05, 1054.74 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  73%|███████▎  | 11738/16000 [00:16<00:04, 1055.36 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  80%|████████  | 12875/16000 [00:17<00:02, 1076.93 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  87%|████████▋ | 13961/16000 [00:18<00:02, 965.37 examples/s] [A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  94%|█████████▎| 14965/16000 [00:20<00:01, 844.69 examples/s][A
+Unsloth: Tokenizing ["prompt"+"completion"] (num_proc=4):  99%|█████████▉| 15860/16000 [00:22<00:00, 654.00 examples/s][AUnsloth: Tokenizing ["prompt"+"completion"] (num_proc=4): 100%|██████████| 16000/16000 [00:23<00:00, 672.97 examples/s]
+🦥 Unsloth: Padding-free auto-enabled, enabling faster training.
+
+=== SFT warm-up: 16000 samples, 1 epoch(s) ===
+Unsloth: Will smartly offload gradients to save VRAM!
+{'loss': '1.293', 'grad_norm': '2.695', 'learning_rate': '1.8e-05', 'epoch': '0.01'}
+{'loss': '0.9491', 'grad_norm': '4.517', 'learning_rate': '3.8e-05', 'epoch': '0.02'}
+{'loss': '0.132', 'grad_norm': '0.3303', 'learning_rate': '5.8e-05', 'epoch': '0.03'}
+{'loss': '0.07011', 'grad_norm': '0.2859', 'learning_rate': '7.8e-05', 'epoch': '0.04'}
+{'loss': '0.02983', 'grad_norm': '0.196', 'learning_rate': '9.8e-05', 'epoch': '0.05'}
+{'loss': '0.03054', 'grad_norm': '0.362', 'learning_rate': '0.000118', 'epoch': '0.06'}
+{'loss': '0.02064', 'grad_norm': '0.1444', 'learning_rate': '0.000138', 'epoch': '0.07'}
+{'loss': '0.01928', 'grad_norm': '0.1991', 'learning_rate': '0.000158', 'epoch': '0.08'}
+{'loss': '0.01925', 'grad_norm': '0.2893', 'learning_rate': '0.000178', 'epoch': '0.09'}
+{'loss': '0.02096', 'grad_norm': '0.1415', 'learning_rate': '0.000198', 'epoch': '0.1'}
+{'loss': '0.02395', 'grad_norm': '0.2314', 'learning_rate': '0.000198', 'epoch': '0.11'}
+{'loss': '0.02662', 'grad_norm': '0.1206', 'learning_rate': '0.0001958', 'epoch': '0.12'}
+{'loss': '0.02023', 'grad_norm': '0.1322', 'learning_rate': '0.0001936', 'epoch': '0.13'}
+{'loss': '0.01497', 'grad_norm': '0.146', 'learning_rate': '0.0001913', 'epoch': '0.14'}
+{'loss': '0.01318', 'grad_norm': '0.03542', 'learning_rate': '0.0001891', 'epoch': '0.15'}
+{'loss': '0.01705', 'grad_norm': '0.1409', 'learning_rate': '0.0001869', 'epoch': '0.16'}
+{'loss': '0.01366', 'grad_norm': '0.106', 'learning_rate': '0.0001847', 'epoch': '0.17'}
+{'loss': '0.01499', 'grad_norm': '0.06284', 'learning_rate': '0.0001824', 'epoch': '0.18'}
+{'loss': '0.01449', 'grad_norm': '0.06855', 'learning_rate': '0.0001802', 'epoch': '0.19'}
+{'loss': '0.01527', 'grad_norm': '0.09317', 'learning_rate': '0.000178', 'epoch': '0.2'}
+{'loss': '0.02113', 'grad_norm': '0.1043', 'learning_rate': '0.0001758', 'epoch': '0.21'}
+{'loss': '0.0138', 'grad_norm': '0.07432', 'learning_rate': '0.0001736', 'epoch': '0.22'}
+{'loss': '0.01321', 'grad_norm': '0.03357', 'learning_rate': '0.0001713', 'epoch': '0.23'}
+{'loss': '0.01104', 'grad_norm': '0.02183', 'learning_rate': '0.0001691', 'epoch': '0.24'}
+{'loss': '0.01341', 'grad_norm': '0.0815', 'learning_rate': '0.0001669', 'epoch': '0.25'}
+{'loss': '0.01698', 'grad_norm': '0.07082', 'learning_rate': '0.0001647', 'epoch': '0.26'}
+{'loss': '0.01471', 'grad_norm': '0.07086', 'learning_rate': '0.0001624', 'epoch': '0.27'}
+{'loss': '0.009542', 'grad_norm': '0.102', 'learning_rate': '0.0001602', 'epoch': '0.28'}
+{'loss': '0.01128', 'grad_norm': '0.1207', 'learning_rate': '0.000158', 'epoch': '0.29'}
+{'loss': '0.009179', 'grad_norm': '0.05602', 'learning_rate': '0.0001558', 'epoch': '0.3'}
+{'loss': '0.01002', 'grad_norm': '0.02763', 'learning_rate': '0.0001536', 'epoch': '0.31'}
+{'loss': '0.01002', 'grad_norm': '0.04349', 'learning_rate': '0.0001513', 'epoch': '0.32'}
+{'loss': '0.01587', 'grad_norm': '0.06167', 'learning_rate': '0.0001491', 'epoch': '0.33'}
+{'loss': '0.009908', 'grad_norm': '0.04353', 'learning_rate': '0.0001469', 'epoch': '0.34'}
+{'loss': '0.01125', 'grad_norm': '0.03281', 'learning_rate': '0.0001447', 'epoch': '0.35'}
+{'loss': '0.01353', 'grad_norm': '0.04305', 'learning_rate': '0.0001424', 'epoch': '0.36'}
+{'loss': '0.01252', 'grad_norm': '0.04699', 'learning_rate': '0.0001402', 'epoch': '0.37'}
+{'loss': '0.01027', 'grad_norm': '0.1363', 'learning_rate': '0.000138', 'epoch': '0.38'}
+{'loss': '0.01035', 'grad_norm': '0.0611', 'learning_rate': '0.0001358', 'epoch': '0.39'}
+{'loss': '0.0167', 'grad_norm': '0.04438', 'learning_rate': '0.0001336', 'epoch': '0.4'}
+{'loss': '0.01067', 'grad_norm': '0.04687', 'learning_rate': '0.0001313', 'epoch': '0.41'}
+{'loss': '0.01134', 'grad_norm': '0.0377', 'learning_rate': '0.0001291', 'epoch': '0.42'}
+{'loss': '0.01073', 'grad_norm': '0.03925', 'learning_rate': '0.0001269', 'epoch': '0.43'}
+{'loss': '0.01296', 'grad_norm': '0.0747', 'learning_rate': '0.0001247', 'epoch': '0.44'}
+{'loss': '0.01258', 'grad_norm': '0.01743', 'learning_rate': '0.0001224', 'epoch': '0.45'}
+{'loss': '0.01015', 'grad_norm': '0.04182', 'learning_rate': '0.0001202', 'epoch': '0.46'}
+{'loss': '0.01294', 'grad_norm': '0.1417', 'learning_rate': '0.000118', 'epoch': '0.47'}
+{'loss': '0.01141', 'grad_norm': '0.04199', 'learning_rate': '0.0001158', 'epoch': '0.48'}
+{'loss': '0.01143', 'grad_norm': '0.01166', 'learning_rate': '0.0001136', 'epoch': '0.49'}
+{'loss': '0.01409', 'grad_norm': '0.03272', 'learning_rate': '0.0001113', 'epoch': '0.5'}
+{'loss': '0.0116', 'grad_norm': '0.0427', 'learning_rate': '0.0001091', 'epoch': '0.51'}
+{'loss': '0.007553', 'grad_norm': '0.05289', 'learning_rate': '0.0001069', 'epoch': '0.52'}
+{'loss': '0.007692', 'grad_norm': '0.06659', 'learning_rate': '0.0001047', 'epoch': '0.53'}
+{'loss': '0.01459', 'grad_norm': '0.1073', 'learning_rate': '0.0001024', 'epoch': '0.54'}
+{'loss': '0.01389', 'grad_norm': '0.1297', 'learning_rate': '0.0001002', 'epoch': '0.55'}
+{'loss': '0.01091', 'grad_norm': '0.04869', 'learning_rate': '9.8e-05', 'epoch': '0.56'}
+{'loss': '0.01059', 'grad_norm': '0.06955', 'learning_rate': '9.578e-05', 'epoch': '0.57'}
+{'loss': '0.00643', 'grad_norm': '0.03395', 'learning_rate': '9.356e-05', 'epoch': '0.58'}
+{'loss': '0.009756', 'grad_norm': '0.1062', 'learning_rate': '9.133e-05', 'epoch': '0.59'}
+{'loss': '0.009229', 'grad_norm': '0.03023', 'learning_rate': '8.911e-05', 'epoch': '0.6'}
+{'loss': '0.01173', 'grad_norm': '0.03197', 'learning_rate': '8.689e-05', 'epoch': '0.61'}
+{'loss': '0.008542', 'grad_norm': '0.04632', 'learning_rate': '8.467e-05', 'epoch': '0.62'}
+{'loss': '0.006862', 'grad_norm': '0.01375', 'learning_rate': '8.244e-05', 'epoch': '0.63'}
+{'loss': '0.01155', 'grad_norm': '0.01589', 'learning_rate': '8.022e-05', 'epoch': '0.64'}
+{'loss': '0.01295', 'grad_norm': '0.02233', 'learning_rate': '7.8e-05', 'epoch': '0.65'}
+{'loss': '0.008617', 'grad_norm': '0.01177', 'learning_rate': '7.578e-05', 'epoch': '0.66'}
+{'loss': '0.009604', 'grad_norm': '0.009182', 'learning_rate': '7.356e-05', 'epoch': '0.67'}
+{'loss': '0.008484', 'grad_norm': '0.09819', 'learning_rate': '7.133e-05', 'epoch': '0.68'}
+{'loss': '0.009772', 'grad_norm': '0.08253', 'learning_rate': '6.911e-05', 'epoch': '0.69'}
+{'loss': '0.01377', 'grad_norm': '0.03314', 'learning_rate': '6.689e-05', 'epoch': '0.7'}
+{'loss': '0.009199', 'grad_norm': '0.05316', 'learning_rate': '6.467e-05', 'epoch': '0.71'}
+{'loss': '0.008602', 'grad_norm': '0.04835', 'learning_rate': '6.244e-05', 'epoch': '0.72'}
+{'loss': '0.01071', 'grad_norm': '0.02972', 'learning_rate': '6.022e-05', 'epoch': '0.73'}
+{'loss': '0.01249', 'grad_norm': '0.1129', 'learning_rate': '5.8e-05', 'epoch': '0.74'}
+{'loss': '0.01384', 'grad_norm': '0.08936', 'learning_rate': '5.578e-05', 'epoch': '0.75'}
+{'loss': '0.01763', 'grad_norm': '0.08994', 'learning_rate': '5.356e-05', 'epoch': '0.76'}
+{'loss': '0.009391', 'grad_norm': '0.04473', 'learning_rate': '5.133e-05', 'epoch': '0.77'}
+{'loss': '0.01192', 'grad_norm': '0.04021', 'learning_rate': '4.911e-05', 'epoch': '0.78'}
+{'loss': '0.01178', 'grad_norm': '0.09859', 'learning_rate': '4.689e-05', 'epoch': '0.79'}
+{'loss': '0.006704', 'grad_norm': '0.02168', 'learning_rate': '4.467e-05', 'epoch': '0.8'}
+{'loss': '0.0101', 'grad_norm': '0.03415', 'learning_rate': '4.244e-05', 'epoch': '0.81'}
+{'loss': '0.0113', 'grad_norm': '0.1112', 'learning_rate': '4.022e-05', 'epoch': '0.82'}
+{'loss': '0.01436', 'grad_norm': '0.05179', 'learning_rate': '3.8e-05', 'epoch': '0.83'}
+{'loss': '0.005483', 'grad_norm': '0.02584', 'learning_rate': '3.578e-05', 'epoch': '0.84'}
+{'loss': '0.008758', 'grad_norm': '0.01811', 'learning_rate': '3.356e-05', 'epoch': '0.85'}
+{'loss': '0.0135', 'grad_norm': '0.07277', 'learning_rate': '3.133e-05', 'epoch': '0.86'}
+{'loss': '0.00843', 'grad_norm': '0.00885', 'learning_rate': '2.911e-05', 'epoch': '0.87'}
+{'loss': '0.007161', 'grad_norm': '0.06622', 'learning_rate': '2.689e-05', 'epoch': '0.88'}
+{'loss': '0.009555', 'grad_norm': '0.03553', 'learning_rate': '2.467e-05', 'epoch': '0.89'}
+{'loss': '0.01209', 'grad_norm': '0.1807', 'learning_rate': '2.244e-05', 'epoch': '0.9'}
+{'loss': '0.01153', 'grad_norm': '0.03899', 'learning_rate': '2.022e-05', 'epoch': '0.91'}
+{'loss': '0.01187', 'grad_norm': '0.1586', 'learning_rate': '1.8e-05', 'epoch': '0.92'}
+{'loss': '0.007287', 'grad_norm': '0.002396', 'learning_rate': '1.578e-05', 'epoch': '0.93'}
+{'loss': '0.01125', 'grad_norm': '0.1114', 'learning_rate': '1.356e-05', 'epoch': '0.94'}
+{'loss': '0.01345', 'grad_norm': '0.1539', 'learning_rate': '1.133e-05', 'epoch': '0.95'}
+{'loss': '0.01639', 'grad_norm': '0.09004', 'learning_rate': '9.111e-06', 'epoch': '0.96'}
+{'loss': '0.008245', 'grad_norm': '0.01905', 'learning_rate': '6.889e-06', 'epoch': '0.97'}
+{'loss': '0.006973', 'grad_norm': '0.1271', 'learning_rate': '4.667e-06', 'epoch': '0.98'}
+{'loss': '0.007818', 'grad_norm': '0.1934', 'learning_rate': '2.444e-06', 'epoch': '0.99'}
+{'loss': '0.01181', 'grad_norm': '0.02508', 'learning_rate': '2.222e-07', 'epoch': '1'}
+{'train_runtime': '5990', 'train_samples_per_second': '2.671', 'train_steps_per_second': '0.167', 'train_loss': '0.03656', 'epoch': '1'}
+SFT log saved -> ./outputs/sft_log.json
+SFT-only adapter checkpoint saved -> ./outputs/lora_adapters_sft
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors:  31%|███       | 37.4MB /  120MB            [A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors:  31%|███       | 37.4MB /  120MB            [A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors:  94%|█████████▍|  112MB /  120MB            [A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors:  99%|█████████▉|  119MB /  120MB            [A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors:  99%|█████████▉|  119MB /  120MB            [A[A[AProcessing Files (1 / 2)      : 100%|█████████▉|  131MB /  131MB,  149MB/s  
+New Data Upload               :  99%|█████████▉|  119MB /  120MB,  149MB/s  [A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|█████████▉|  119MB /  120MB            [A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[AProcessing Files (2 / 2)      : 100%|██████████|  131MB /  131MB, 85.6MB/s  
+New Data Upload               : 100%|██████████|  120MB /  120MB, 85.6MB/s  
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            
+[hub] post-SFT checkpoint pushed -> https://huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs
+
+=== Offline eval [post-SFT] over 200 samples ===
+  compliance avg     : 0.968 / 1.0
+  appropriateness avg: 0.450 / 0.5
+  drift_bonus avg    : 0.037 / 0.5
+  total avg          : 1.455 / 2.0
+  drift-sens acc     : 88.2%  (15/17)
+    tightening : 91.3%  (21/23)
+    loosening  : 71.4%  (10/14)
+    neutral    : n/a  (0/0)
+
+=== GRPO: 16000 prompts, max_steps=600, K=8 ===
+Unsloth: Will smartly offload gradients to save VRAM!
+
+[grpo] FAILED: RuntimeError: self and mat2 must have the same dtype, but got Half and Float
+[grpo] Continuing with post-SFT model as the final artifact.
+
+=== Improvement summary ===
+  compliance           0.528  ->  0.968  ->  0.968
+  appropriateness      0.410  ->  0.450  ->  0.450
+  drift_bonus          0.005  ->  0.037  ->  0.037
+  drift-sens acc (all) 11.8% -> 88.2% -> 88.2%
+    tightening       0.0% -> 91.3% -> 91.3%
+    loosening        21.4% -> 71.4% -> 71.4%
+    neutral          n/a -> n/a -> n/a
+Eval snapshots saved -> ./outputs/evals.json
+
+LoRA adapters saved to ./outputs/lora_adapters
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A
+
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A[A
+
+
+
+
+  ...a_adapters/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A[A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A
+
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A[A
+
+
+
+
+  ...a_adapters/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A[A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A
+
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A[A
+
+
+
+
+  ...a_adapters/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A[A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A
+
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A[A
+
+
+
+
+  ...a_adapters/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A[A[A[A
+
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A
+
+
+
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            [A[A[A[A
+
+
+
+
+  ...a_adapters/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            [A[A[A[A[AProcessing Files (4 / 4)      : 100%|██████████|  262MB /  262MB,  0.00B/s  
+New Data Upload               : |          |  0.00B /  0.00B,  0.00B/s  
+  ...apters_sft/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            
+  ...adapter_model.safetensors: 100%|██████████|  120MB /  120MB            
+  ...a_adapters/tokenizer.json: 100%|██████████| 11.4MB / 11.4MB            
+[hub] post-GRPO final pushed -> https://huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs

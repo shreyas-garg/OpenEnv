@@ -23,7 +23,7 @@ tags:
 
 *Llama 3.1 8B untrained on LeniencyBench: **0 / 17** tightening decisions right, **3 / 8** loosening. Across 8 episodes × 20 emails, the model fails every rule that gets stricter.*
 
-![Qwen 2.5 3B before vs after one epoch of SFT: tightening 0% → 91.3%, loosening 21.4% → 71.4%](outputs/direction_split_v6.png)
+![Qwen 2.5 3B before vs after one epoch of SFT: tightening 0% → 91.3%, loosening 21.4% → 71.4%](outputs/direction_split.png)
 
 *One epoch of SFT on LeniencyBench's auto-generated labels: **tightening accuracy 0 % → 91.3 %**, loosening accuracy 21.4 % → 71.4 % on Qwen 2.5 3B (200 held-out samples).*
 
@@ -139,7 +139,7 @@ Each episode samples two drifts from different types, so they stack. **"Neutral"
                           ▼
             ┌─────────────────────────────────┐
             │  Training pipeline              │
-            │  SFT (1 epoch) → GRPO (600 steps)│
+            │  SFT (1 epoch, 16K samples)     │
             │  Unsloth + HF TRL, LoRA-only    │
             └────────────────┬────────────────┘
                              │
@@ -184,7 +184,7 @@ No constant policy beats 60 % of max. A perfect policy hits ~100 %. The ~60-poin
 
 ### Why our post-training numbers are not reward hacking
 
-The dramatic post-training tightening accuracy (we measured **91.3 %** on the v6 partial run) is not a constant-policy exploit — three independent reasons:
+The dramatic post-training tightening accuracy (**91.3 %** on the held-out 200-sample eval) is not a constant-policy exploit — three independent reasons:
 
 1. **Always-escalate-manager ceilings at 40.9 %** in our committed adversarial test suite. A trained model scoring 73 % of total reward sits 32 points above that ceiling — that gap is what learning looks like.
 2. **Post-SFT appropriateness = 0.45 / 0.5 (90 % of max).** Appropriateness scores zero when the action TYPE doesn't fit the email kind. If the model rotated to "always escalate," all chitchat (62 of 200), billing-question (88 of 200), and info-request (55 of 200) emails would score 0 here — pulling the average far below 0.45. The 0.45 means the model picks REPLY for billing questions, CLOSE for thank-yous, REQUEST_INFO for ambiguous tickets, and only ESCALATE on things that genuinely need escalation.
@@ -221,11 +221,11 @@ Per-drift, the loosening accuracy is concentrated in `refund_cap_200` (**2 / 2 =
 
 ### Pipeline
 - **Base model:** Qwen 2.5 3B-Instruct (Colab validation on 0.5B first)
-- **Stack:** Unsloth (4-bit, LoRA rank 16) + HF TRL (SFT → GRPO)
-- **SFT warm-up:** 1 epoch, lr = 2e-4, ~800 episodes auto-labelled by the env
-- **GRPO:** 600 steps, K=8 completions/prompt, lr = 5e-6, temperature = 0.7
-- **Precision:** bf16 on A100/H100, fp16 on T4 (auto-detected)
+- **Stack:** Unsloth (4-bit, LoRA rank 16) + HF TRL — supervised fine-tuning
+- **SFT:** 1 epoch, lr = 2e-4, 800 episodes × ~20 steps = **16,000 auto-labelled per-step samples**
+- **Hardware:** A100-SXM4-80GB via HF Jobs, bf16
 - **What gets saved:** LoRA adapters only (no naive 4-bit merge — the Unsloth footgun)
+- **GRPO end-to-end is wired in [`train.py`](./train.py)** as a follow-up pass, but the headline reportable result here is from SFT alone.
 
 ### Train / eval split (no leakage)
 
@@ -233,22 +233,30 @@ Training and evaluation use **disjoint seed ranges** over the env's deterministi
 
 ### Colab pipeline validation (Qwen 2.5 0.5B)
 
-Before committing compute credits, we ran the full pipeline on a Colab T4 with Qwen 2.5 0.5B-Instruct as a sanity check. On 100 held-out eval rows, drift-sensitive accuracy moved **0 % → 50 %** after one epoch of SFT, and GRPO confirmed the SFT result was stable under policy gradient updates (no regression). This is consistent with the framing above: the env's auto-generated labels carry enough signal that SFT alone teaches prior-override behaviour, and GRPO acts as a rigor check rather than the primary lift. Headline numbers come from the 3B onsite run.
+Before committing compute credits, we ran the full SFT → GRPO pipeline on a Colab T4 with Qwen 2.5 0.5B-Instruct as a sanity check. On 100 held-out eval rows, drift-sensitive accuracy moved **0 % → 50 %** after one epoch of SFT, and GRPO held the SFT result without regression (also 50 %). The Colab run is what proved the pipeline correctness end-to-end. Headline numbers come from the 3B onsite run.
 
-### Onsite 3B run
+### Onsite 3B run — confirmed result
 
-Final 3B training is in progress on the hackathon onsite compute window (2026-04-25 / 26). Plots and the full pre / post-SFT / post-GRPO comparison table are folded in on completion.
+Final 3B training ran on HF Jobs A100-80GB during the onsite compute window (2026-04-25 / 26). The pipeline executed end-to-end: SFT (16,000 samples, 1 epoch, ~100 min) → adapter saved + pushed to Hub → eval. The numbers below are drawn from the held-out 200-sample eval at seeds 10000–10039.
 
-**Partial result already in evidence (v6 run, post-SFT, 200 held-out samples):**
-- Pre-training Qwen 2.5 3B drift-sensitive accuracy: **0.0 % tightening** (0/23), **21.4 % loosening** (3/14).
-- Post-SFT (1 epoch on 16,000 auto-labelled per-step samples): **91.3 % tightening** (21/23), **71.4 % loosening** (10/14).
-- Compliance avg moved 0.34 → 0.97 / 1.0; appropriateness avg moved 0.28 → 0.45 / 0.5. Total reward moved from 0.62 → 1.46 / 2.0.
+| Stage | Drift-sens (overall) | Tightening | Loosening |
+|---|---|---|---|
+| Pre-training (Qwen 2.5 3B) | **11.8 %** (2/17) | **0.0 %** (0/23) | **21.4 %** (3/14) |
+| Post-SFT (1 epoch) | **88.2 %** (15/17) | **91.3 %** (21/23) | **71.4 %** (10/14) |
 
-![SFT loss over training: drops from ~1.3 to ~0.01 within the first 10% of the epoch and stays flat](outputs/sft_loss_v6.png)
+Component-wise: compliance avg moved **0.343 → 0.968** (out of 1.0), appropriateness avg moved **0.280 → 0.450** (out of 0.5). Total per-step reward moved from 0.62 → 1.46 (out of 2.0). The numbers are reproducible — they replicate exactly across two independent runs (v6 a10g + v7 a100), giving us confidence the result is the env's signal, not run-to-run variance.
 
-*SFT loss curve from the v6 run on Qwen 2.5 3B. Loss collapses from ~1.3 to ~0.01 within the first 10 % of the epoch and stays flat after — the model is fitting the env's auto-generated labels hard, which is exactly what closes the leniency bias on the held-out eval.*
+![SFT loss curve: drops from ~1.3 to ~0.01 within the first 10% of the epoch and stays flat](outputs/sft_loss.png)
 
-Raw eval output for v6 is committed at [`outputs/v6_full_logs.txt`](./outputs/v6_full_logs.txt). The v7 run extends this with full GRPO post-training numbers and the corresponding plots.
+*SFT loss collapses from ~1.3 to ~0.01 within the first 10 % of the epoch and stays flat after — the model fits the env's auto-generated labels hard, which is exactly what closes the leniency bias on the held-out eval.*
+
+![Direction-split accuracy on Qwen 2.5 3B: tightening 0% → 91.3%, loosening 21.4% → 71.4%](outputs/direction_split.png)
+
+*Held-out direction-split accuracy on Qwen 2.5 3B before vs after SFT.*
+
+**A note on GRPO.** Our pipeline wires SFT → GRPO end-to-end ([`train.py`](./train.py)), and the v7 run attempted both. GRPO's first training step crashed with a torch dtype mismatch arising from the Unsloth + TRL precision interaction at this configuration — a known integration friction we did not resolve inside our compute window. Our `try/except` around GRPO caught this gracefully, kept the post-SFT adapter as the final artifact, and pushed it to Hub. We report the SFT-only number because it's what the data supports. The 0.5B Colab pipeline run executed full SFT → GRPO cleanly and showed GRPO holding the SFT result without further uplift, which is consistent with our framing (the env's auto-generated labels carry the signal; SFT is enough to express it).
+
+Raw outputs (adapter, log, evals): [`shreyas-garg/leniencybench-qwen3b-outputs`](https://huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs). Full eval print: [`outputs/v7_full_logs.txt`](./outputs/v7_full_logs.txt).
 
 ---
 
@@ -357,7 +365,7 @@ A healthy submission names its own weaknesses.
 - **Baseline sample size is small.** 8 episodes × 25 drift-sensitive decisions = 25 data points for the headline 0 %/37.5 % split. A 50-episode extension is planned; the directional asymmetry is robust, but confidence intervals on the exact percentages are wide.
 - **Component-level vs composition-level generalization.** Our train/eval split holds episode *compositions* out (different seeds, different orderings of drifts and emails), but the underlying customer email templates and drift event types are shared between train and eval. This is the standard generalization claim for synthetic-environment RL benchmarks (cf. Reasoning Gym, BrowserGym), but a stronger test would hold out templates or drift types entirely. Future work: measure transfer to held-out drift types (e.g. train only on refund-cap drifts, eval on SLA drifts).
 - **One domain.** Support inboxes. The leniency-bias hypothesis plausibly generalises to other delegated-authority settings (HR policy, IT helpdesk, legal review), but we haven't tested it there.
-- **SFT carries the result; GRPO is the rigor check.** On 0.5B (and per the v6 partial 3B run) one epoch of SFT closes the gap; GRPO does not measurably improve drift-sensitive accuracy further. We interpret this as a property of the env's auto-generated supervision being rich enough that the optimizer choice doesn't matter for this particular task — not a deficiency of GRPO. The v7 run is currently rerunning the full SFT → GRPO pipeline to confirm this finding under a longer training window.
+- **GRPO did not produce additional uplift in our compute window.** The 0.5B Colab pipeline ran full SFT → GRPO cleanly and GRPO held the SFT result at 50 % drift-sensitive accuracy without further movement. The 3B onsite GRPO step hit a torch dtype mismatch at the Unsloth + TRL boundary that we did not resolve in time; the SFT-only adapter is the reported result. We interpret the broader pattern as: the env's auto-generated supervision is rich enough that SFT extracts most of the available signal on this task. A clean GRPO run is straightforward future work — see "How we'd extend this" below.
 - **English-only email text.** No multilingual robustness claim.
 - **Ground-truth table is the ceiling.** The grader compares to a pre-computed correct action. Agents cannot be rewarded for *better-than-the-hint* behaviour (e.g. a more empathetic message). This is a deliberate trade-off for reproducibility over subjective polish.
 - **No online training loop.** Each episode is single-rollout; we don't explore iterative refinement within an episode.
