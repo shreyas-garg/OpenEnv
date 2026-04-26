@@ -100,12 +100,12 @@ print(json.load(open(p))["post_sft"]["drift_acc_by_direction"])
 
 <h2>Read more</h2>
 <ul>
-  <li><a href="https://github.com/shreyas-garg/OpenEnv">Source code (GitHub)</a></li>
-  <li><a href="https://huggingface.co/shreyas-garg/leniencybench">Source code (HF mirror)</a></li>
-  <li><a href="https://huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs">Trained adapter + logs</a></li>
-  <li><a href="/docs">Interactive API explorer</a></li>
-  <li><a href="https://huggingface.co/spaces/shreyas-garg/drift-env/blob/main/blog.md">Mini blog (≤2 min read)</a></li>
-  <li><a href="https://huggingface.co/spaces/shreyas-garg/drift-env/blob/main/README.md">Full README with architecture, reward design, related work</a></li>
+  <li><a href="https://github.com/shreyas-garg/OpenEnv" target="_blank" rel="noopener noreferrer">Source code (GitHub)</a></li>
+  <li><a href="https://huggingface.co/shreyas-garg/leniencybench" target="_blank" rel="noopener noreferrer">Source code (HF mirror)</a></li>
+  <li><a href="https://huggingface.co/shreyas-garg/leniencybench-qwen3b-outputs" target="_blank" rel="noopener noreferrer">Trained adapter + logs</a></li>
+  <li><a href="/docs" target="_blank" rel="noopener noreferrer">Interactive API explorer</a></li>
+  <li><a href="https://huggingface.co/spaces/shreyas-garg/drift-env/blob/main/blog.md" target="_blank" rel="noopener noreferrer">Mini blog (≤2 min read)</a></li>
+  <li><a href="https://huggingface.co/spaces/shreyas-garg/drift-env/blob/main/README.md" target="_blank" rel="noopener noreferrer">Full README with architecture, reward design, related work</a></li>
 </ul>
 
 <p class="footer">Built for the Meta PyTorch × Hugging Face OpenEnv Hackathon, Round 2 · April 2026.</p>
